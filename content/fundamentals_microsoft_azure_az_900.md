@@ -92,5 +92,101 @@ The choice between a private, public, or hybrid cloud depends on various factors
 
 ---
 
+## 🎓 Class 3: Costs and Benefits of Azure Cloud Solutions
+
+### 💭 How Can a Cloud Solution Help You and When Can It Hurt You?
+
+Starting with a cloud service can be exciting. The possibilities seem limitless: virtual machines with hundreds of gigs of RAM and terabytes of storage, powerful GPUs... It seems like a technological dream come true. However, these services come with a cost, and the cloud can easily become a financial burden if not managed properly.
+
+---
+
+### 🎯 Why is it Important to Evaluate Your Cloud Needs?
+
+It's fundamental to understand the relationship between the services you acquire and their costs. The cloud is designed to improve your operations, but if not managed wisely, costs can exceed benefits:
+
+| ⚠️ Common Pitfall | Description |
+|-------------------|-------------|
+| 🔧 **Excessive Configurations** | Opting for hardware configurations too powerful for your current needs can be a costly mistake |
+| 💡 **Common Mistakes** | Like forgetting to turn off virtual machines, which can inflate your monthly costs |
+
+> 📊 A correct evaluation will allow you to mitigate cost risks associated with using unnecessary resources.
+
+---
+
+### 🧮 How to Use the Azure Pricing Calculator to Plan Your Costs?
+
+Microsoft Azure offers an invaluable platform to forecast and plan your costs: the **[Azure Pricing Calculator](https://azure.microsoft.com/pricing/calculator/)**. This resource becomes an essential tool for any company that wants total control over their cloud budget:
+
+#### 🔍 Navigation and Selection
+
+In the pricing calculator, you can choose from a vast catalog of services. The most common fields include:
+
+- 🖥️ Virtual Machines
+- 🗄️ Databases
+- 💾 Storage
+
+#### ⚙️ Virtual Machine Specifications
+
+Here you define key parameters such as:
+
+| Parameter | Options |
+|-----------|---------|
+| 💻 **Operating System** | Windows, Linux, etc. |
+| ⚡ **Compute Type** | High performance or general use |
+| 🌍 **Region** | Where it will be deployed |
+
+#### 💵 Cost Estimates
+
+You can calculate typical monthly costs based on usage hours. For example:
+
+| Configuration | Estimated Monthly Cost |
+|---------------|----------------------|
+| 🚀 High-performance VM | ~$7,000/month |
+| 👨‍💻 Basic developer setup | ~$11/month |
+
+---
+
+### 🔬 What Benefits Does Exploring Example Scenarios Offer?
+
+Exploring example scenarios in the Azure calculator allows you to forecast architectures and costs associated with configurations you might not have considered:
+
+#### 📋 Key Benefits:
+
+| Benefit | Description |
+|---------|-------------|
+| 📊 **Common Scenario Analysis** | By selecting example scenarios, you can see predefined configurations for web applications or CI/CD architecture |
+| 💰 **Simulated Budget** | By adding these configurations to your budget, you get a clear view of associated costs |
+| 📤 **Data Export** | Finally, you can export estimated costs to an Excel file for sharing or later analysis |
+
+---
+
+### 🏆 Key Takeaways
+
+> 💡 Using the Azure Pricing Calculator will not only help you plan and forecast costs, but it will also ensure you're using cloud technology in favor of your operations, maximizing benefits and keeping your finances under control.
+
+#### ✅ Action Items:
+
+- 🧮 **Always estimate costs** before deploying resources
+- ⏰ **Set up auto-shutdown** for development VMs
+- 📊 **Review usage regularly** to avoid surprise bills
+- 🎯 **Right-size your resources** - don't over-provision
+
+---
+
+### 📝 Class 3 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              AZURE COST MANAGEMENT                      │
+├─────────────────────────────────────────────────────────┤
+│  🧮 CALCULATOR    │  Plan & forecast your expenses     │
+│  ⚠️ PITFALLS      │  Over-provisioning, forgotten VMs  │
+│  📊 SCENARIOS     │  Use examples to estimate costs    │
+│  💰 EXPORT        │  Share estimates via Excel         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
