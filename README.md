@@ -13,3 +13,4 @@ Notes, conten and code for Azure courses
 ### Other links
 
 * [Azure for Students](https://azure.microsoft.com/es-es/free/students) - Free $100 credit for students (no credit card required)
+* [Azure Free Account / Free Services](https://azure.microsoft.com/es-es/free/) - Try Azure for free and explore free services

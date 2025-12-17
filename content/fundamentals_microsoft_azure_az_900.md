@@ -188,5 +188,75 @@ Exploring example scenarios in the Azure calculator allows you to forecast archi
 
 ---
 
+## 🎓 Class 4: How to Create an Azure Account Securely
+
+### 🔐 How to Create an Azure Account Securely?
+
+Starting your Azure cloud journey can be exciting—and maybe a bit intimidating—especially when it comes to your account’s initial setup. Here’s a detailed, reliable guide to configure your Azure account securely and efficiently, while maximizing the benefits available to you.
+
+---
+
+### 🚀 What’s the First Step?
+
+To begin, go to **[Azure Free Account / Free Services](https://azure.microsoft.com/es-es/free/)** and choose **“Try Azure for free”**. You’ll be asked to enter a valid email address, then follow a simple verification process.
+
+For extra security, you may choose to receive a notification on your phone to confirm it’s really you signing in (a strong way to protect your account).
+
+---
+
+### 💳 What Should I Know About the Subscription?
+
+When you create your account, Azure offers a **free subscription** with a **$200 USD credit**. This is typically enough to learn and experiment with the services used throughout the course.
+
+You’ll also be asked to add a payment method (credit/debit card) to cover any usage that exceeds the free credit. In the context of this course, you shouldn’t need to spend beyond that credit if you follow the guidance and keep resources under control.
+
+---
+
+### 🛠️ Should I Add Technical Support?
+
+During signup, Azure may offer you the option to add technical support. If you’re not planning to deploy high-impact or mission-critical solutions, it’s usually fine to skip paid support while you learn.
+
+---
+
+### 🌍 How Do I Configure My Account for Comfort?
+
+After creating your account, Azure will show a quick tutorial. Spending a few minutes on it can help you understand the portal faster.
+
+By default, Azure may appear in English, but you can change it easily:
+
+- ⚙️ Go to **Settings**
+- 🈯 Select **Language**
+- 🇪🇸 Switch it to Spanish (or your preferred language)
+
+---
+
+### 🏁 Key Takeaways
+
+> ✅ A secure setup from day one helps you learn confidently, reduces risk, and keeps your cloud experience smooth.
+
+#### ✅ Action Items:
+
+- 📱 Enable strong sign-in verification (phone prompt / MFA)
+- 💳 Monitor your free credit so you don’t exceed it unintentionally
+- 🧭 Take the portal tutorial to understand the basics faster
+- 🌍 Set the portal language to what’s most comfortable for you
+
+---
+
+### 📝 Class 4 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│            SECURE AZURE ACCOUNT SETUP                    │
+├─────────────────────────────────────────────────────────┤
+│  ✉️ SIGN UP       │  Use “Try Azure for free”           │
+│  📱 VERIFY        │  Confirm sign-in for security        │
+│  💳 CREDIT        │  $200 free credit (watch usage)      │
+│  🌍 SETTINGS      │  Tutorial + language configuration   │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
