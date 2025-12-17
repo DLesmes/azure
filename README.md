@@ -12,4 +12,4 @@ Notes, conten and code for Azure courses
 
 ### Other links
 
-* pass
+* [Azure for Students](https://azure.microsoft.com/es-es/free/students) - Free $100 credit for students (no credit card required)
