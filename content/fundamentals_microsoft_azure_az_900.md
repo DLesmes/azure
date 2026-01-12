@@ -258,5 +258,105 @@ By default, Azure may appear in English, but you can change it easily:
 
 ---
 
+## 🎓 Class 5: Installing Azure CLI (Windows, macOS, Ubuntu/Debian) + First Login
+
+### 🧾 Summary: How to Install Azure CLI on Different Operating Systems?
+
+Managing your Azure subscription has never been easier. This class walks you step by step through installing the **Azure Command-Line Interface (Azure CLI)** so you can manage Azure from a terminal. 💻
+
+This is especially useful if you’re a contributor (not the main subscription admin), because you might not see everything in the Azure Portal depending on permissions and roles—but with CLI you can still work efficiently with what you do have access to. 🔍
+
+#### 🔗 Official installation guide
+
+- 📘 **Microsoft Learn**: [Install Azure CLI](https://learn.microsoft.com/es-es/cli/azure/install-azure-cli?view=azure-cli-latest)
+
+---
+
+### 🪟 How to Install Azure CLI on Windows
+
+- ⬇️ **Download the installer** from the class resources / official guide
+- ▶️ **Run the installer** and follow the usual flow: *Next → Next → Next*
+
+✅ Quick and painless.
+
+---
+
+### 🍎 How to Install on macOS (Homebrew)
+
+If you use macOS, **Homebrew** makes installation simple:
+
+- 🧑‍💻 **Run a single command** in your terminal (as provided in the official guide)
+
+---
+
+### 🐧 How to Install on Ubuntu and Debian
+
+Just like macOS, installation on Ubuntu/Debian is straightforward:
+
+- 🧩 **Run the install command/script** from the official guide
+- ⚙️ The script will download and configure Azure CLI automatically
+
+---
+
+### ✅ How to Verify the Installation Worked
+
+No matter which OS you’re using, open a terminal and run:
+
+```bash
+az
+```
+
+If installation is correct, you’ll see a long list of available commands. At the top, you’ll typically see the **Azure name in ASCII art**, which is a great sign everything is working. 🎉
+
+---
+
+### 🔐 How to Sign In to Azure from Azure CLI
+
+After confirming the CLI works, sign in:
+
+```bash
+az login
+```
+
+This usually opens a browser to authenticate. If it doesn’t (or your environment is restricted), use device code login:
+
+```bash
+az login --use-device-code
+```
+
+Then:
+
+- 🔢 **Copy the code** shown in your terminal
+- 🌐 **Paste it into the webpage** that opens to complete authentication
+
+---
+
+### 🧭 Verify Subscriptions + Confirm Your Active Context
+
+Once logged in, Azure CLI will list your accessible subscriptions. Choose the one you want to use, then verify your current selection:
+
+```bash
+az account show
+```
+
+✅ This confirms which subscription/account context you’re using—so you can confidently deploy resources from the portal or straight from the CLI. 🚀
+
+---
+
+### 📝 Class 5 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE CLI BASICS                      │
+├─────────────────────────────────────────────────────────┤
+│  ⬇️ INSTALL       │  Windows / macOS / Ubuntu-Debian     │
+│  ✅ VERIFY        │  Run `az` to confirm it works         │
+│  🔐 LOGIN         │  `az login` / `--use-device-code`     │
+│  🧾 CONTEXT       │  Check active subscription/account    │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
