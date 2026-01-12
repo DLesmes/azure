@@ -358,5 +358,104 @@ az account show
 
 ---
 
+## 🎓 Class 6: Monitoring and Managing Your Costs in Azure
+
+### 🧾 Summary: How to Monitor and Manage Your Costs in Azure?
+
+Cost management in Azure is a key skill for any IT professional. Estimating costs and keeping cloud resources under control helps you use your budget efficiently **and** maintain optimal system performance. While the Azure Pricing Calculator is a great starting point, real usage can differ—so learning where to monitor actual spend in the Azure Portal is essential. 💸📊
+
+---
+
+### 🔑 How to Access the Subscriptions Section in Azure
+
+Go to the **Azure Portal** and open **Subscriptions**:
+
+- 🔎 If you don’t see it right away, use the search bar and type **“Subscriptions”**
+- 🗝️ You’ll land on the subscriptions page where you can view your available subscriptions and drill into details
+
+---
+
+### 📈 What Cost Information Can You See?
+
+Inside the subscription view, Azure surfaces cost-related insights that help you stay on top of spending:
+
+#### 📊 Cost charts
+
+- 📉 You’ll see charts showing your **used amount** and **remaining amount** (when applicable)
+- 🔮 Azure can also **project end-of-month costs** based on your current resource usage (a forward-looking estimate to prevent surprises)
+
+#### 🧾 Resource breakdown
+
+As you scroll down, you can identify:
+
+- 🧱 Which resources are costing the most
+- 🎯 Where you should investigate sizing, schedules, or cleanup
+
+---
+
+### ⚙️ How to Optimize Resource Management
+
+Monitoring cost per resource is the best way to avoid unnecessary spend. When you see a resource driving high costs, check whether it’s over-sized compared to what you actually need.
+
+Helpful ways to organize your review:
+
+- 📍 **By location/region**
+- 🏷️ **By resource name**
+- 🗂️ **By resource group**
+
+---
+
+### 🛡️ What If You Find Unsecured Resources?
+
+Any resource flagged as **not secure** should be reviewed and secured as a priority. 🚨  
+Unsecured resources can introduce **security risk** and also **cost risk** (for example, unexpected usage due to exposure or misconfiguration).
+
+---
+
+### 💡 Does Azure Provide Personalized Recommendations?
+
+Yes—Azure can provide recommendations based on how you’re using resources. For example:
+
+- ⬆️ Suggesting a move from a **basic** plan to a **premium** plan if usage patterns justify it
+- 🧠 Highlighting optimization opportunities to improve cost-efficiency
+
+Following these recommendations (with good judgment) can help optimize both performance and cost. ✅
+
+---
+
+### 🧮 How to Set Budgets in Azure
+
+In **Cost Management**, you’ll find **Budgets**—a feature that lets you set spending limits and receive notifications if you approach or exceed them. 🔔
+
+Example:
+
+- 🖥️ If you decide a VM shouldn’t exceed **$100/month**, you can create a budget and have Azure alert you as you near that threshold.
+
+---
+
+### 🏁 Key Takeaways
+
+- 📊 Use **Subscriptions + Cost Management** to track real spend (not just estimates)
+- 🧹 Periodically review for unused resources and delete what you don’t need
+- 🎯 Right-size and organize resources to keep spending predictable
+- 🔔 Set budgets early to avoid surprise bills
+
+---
+
+### 📝 Class 6 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                AZURE COST MONITORING                     │
+├─────────────────────────────────────────────────────────┤
+│  🔎 SUBSCRIPTIONS  │  Find costs + projections            │
+│  🧾 BREAKDOWN      │  Identify top-cost resources          │
+│  ⚙️ OPTIMIZE       │  Right-size + organize by groups      │
+│  🔔 BUDGETS        │  Alerts when you approach limits      │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
