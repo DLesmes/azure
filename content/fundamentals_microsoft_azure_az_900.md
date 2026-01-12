@@ -457,5 +457,87 @@ Example:
 
 ---
 
+## 🎓 Class 7: Navigating the Azure Portal
+
+### 🧾 Summary: How Do You Navigate the Azure Portal?
+
+The Azure Portal is a powerful tool for managing and deploying cloud resources. With **nearly 200 services** available, it can feel overwhelming at first—and that’s completely normal. 😅  
+In this class, you’ll learn how to navigate the portal and align Azure resources with your specific needs. 🧭
+
+---
+
+### 🧱 What Is the Azure Main Menu?
+
+When you sign in to the Azure Portal, you’ll notice a **top (horizontal) menu** that helps you quickly access things you’ve used recently.
+
+- 🕘 **Recent items**: jump back into the last services/resources you worked on
+- ➕ **Create a resource**: a quick entry point to deploy new services fast
+- 🎛️ **Personalization**: the portal adapts based on your usage, and you can customize what you pin and how you navigate
+
+---
+
+### 🔍 How Do You Explore Service Options?
+
+Azure has many categories of ready-to-deploy services. In the portal, you can explore categories and also discover services you might not have used before.
+
+Make sure to explore:
+
+- 📚 **All services**: a complete list of resources organized by category (super helpful when you don’t know the exact name)
+
+#### ⭐ Popular categories to know
+
+- 🤖 **AI + Machine Learning**: Azure AI Foundry, Machine Learning
+- 🗄️ **Databases**: Azure Cosmos DB, Azure SQL (e.g., Hyperscale)
+- 📦 **Containers**: Container Instances, Container Registry
+
+---
+
+### 🎯 What Does “Specialization” Mean in Azure?
+
+Azure is huge. It’s practically impossible to master every service—and that’s expected. ✅  
+Instead, most professionals specialize in a domain, for example:
+
+- 🗃️ **Data**
+- 🧩 **Distributed applications**
+- 🖥️ **Compute / infrastructure**
+
+Specializing lets you go deep where it matters, without needing to know every single Azure product. 🧠
+
+---
+
+### 🔄 How Do You Stay Up to Date in Azure?
+
+Azure changes constantly: new services appear, others evolve, and features get renamed or reorganized. Keeping up with everything is hard, so use a strategy:
+
+- 🧭 Pick a category you care about
+- 🧪 Deploy and experiment with services in that category
+- 🧹 Delete resources when you’re done learning (to avoid cost surprises)
+
+> 🧠 Experimentation is your best friend: deploy → learn → clean up.
+
+---
+
+### 🚀 Start Exploring!
+
+With this, you’re ready to dive into Azure. Don’t worry if it feels like a lot in the beginning—practice will quickly make the portal feel familiar. 💪  
+Explore, test, and iterate so you can choose the best tools for your projects. 🌩️
+
+---
+
+### 📝 Class 7 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                AZURE PORTAL NAVIGATION                   │
+├─────────────────────────────────────────────────────────┤
+│  🧱 MAIN MENU      │  Recent items + Create resource      │
+│  📚 ALL SERVICES   │  Browse services by category         │
+│  🎯 SPECIALIZE     │  Go deep in a domain                 │
+│  🧪 EXPERIMENT     │  Deploy → learn → delete             │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
