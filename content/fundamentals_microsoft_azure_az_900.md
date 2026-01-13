@@ -846,5 +846,95 @@ az deployment group create \
 
 ---
 
+## 🎓 Class 11: Why Automate Infrastructure in Azure? (Azure CLI Basics)
+
+### 🧾 Summary: Why Do We Need to Automate Infrastructure in Azure?
+
+Infrastructure automation isn’t just a trend—it’s a necessity in modern development environments. 🚀  
+Think about scenarios like:
+
+- 👩‍💻 Deploying infrastructure for **5 developers** before merging their work
+- 👥 Scaling that process to **50 people**
+- ⏰ Spinning up infrastructure **minutes before work starts** and shutting it down **at the end of the day**
+
+When scale increases, manual work in the portal (and even template-heavy workflows) becomes painful. That’s where **Azure CLI (`az`)** becomes a powerful ally. 💻⚡
+
+---
+
+### 🛠️ How to Use Azure CLI to Create Resources
+
+Azure CLI lets you create resources using simple commands.
+
+#### 🗂️ Create a Resource Group
+
+```bash
+az group create -l eastus2 -n GrupoRecursosCLI
+```
+
+- 📍 `-l` / `--location`: Azure region (here: `eastus2`)
+- 🏷️ `-n` / `--name`: resource group name
+
+✅ This is the CLI equivalent of creating a resource group in the portal—done in seconds. The CLI returns a JSON payload describing the created resource.
+
+#### 💾 Create a Storage Account
+
+```bash
+az storage account create -n cuentacliamin001 -g GrupoRecursosCLI -l eastus2 --sku Standard_LRS
+```
+
+- 🏷️ `-n` / `--name`: **globally unique** storage account name (tip: add numbers to avoid collisions)
+- 🗂️ `-g` / `--resource-group`: where to deploy
+- 📍 `-l` / `--location`: region
+- 💸 `--sku Standard_LRS`: Standard performance + locally redundant storage (cost-friendly and great for labs)
+
+---
+
+### 🧭 How to Discover Available Commands and Parameters
+
+When you’re starting out, the biggest question is usually “what flags do I need?” You have two main ways:
+
+#### 🆘 Use built-in help
+
+```bash
+az --help
+az storage --help
+az storage account --help
+```
+
+This lets you “drill down” until you find the command and the required parameters. 🔎
+
+#### 🌐 Use Microsoft Learn documentation
+
+If you prefer a visual reference with examples, Microsoft Learn lists commands, required/optional parameters, and usage patterns.
+
+Recommended resource:
+
+- 📘 [Manage Azure resources using Azure CLI](https://learn.microsoft.com/es-es/azure/azure-resource-manager/management/manage-resources-cli)
+
+---
+
+### 🏁 Key Takeaways
+
+- ⚡ Azure CLI reduces clicks and speeds up provisioning
+- ✅ Automation improves consistency and reduces human error
+- 📚 Built-in help + Microsoft Learn docs make discovery easy
+
+---
+
+### 📝 Class 11 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 AZURE CLI AUTOMATION                     │
+├─────────────────────────────────────────────────────────┤
+│  🗂️ GROUP CREATE    │  `az group create`                  │
+│  💾 STORAGE CREATE  │  `az storage account create`         │
+│  🆘 HELP SYSTEM     │  `az ... --help`                     │
+│  📘 DOCS            │  Learn examples + parameters         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
