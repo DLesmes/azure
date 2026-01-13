@@ -936,5 +936,134 @@ Recommended resource:
 
 ---
 
+## 🎓 Class 12: Using Azure from the Command Line (Azure CLI + IaaS Lab)
+
+### 🧾 Summary: How Do I Use Azure with the Command Line?
+
+Azure is a powerful cloud platform, and **Azure CLI** is one of the best ways to manage resources efficiently—especially when you’re practicing **Infrastructure as a Service (IaaS)**. 💻☁️
+
+---
+
+### 🏗️ What Is Infrastructure as a Service (IaaS)?
+
+IaaS lets you create and manage cloud infrastructure similarly to physical servers, but on-demand:
+
+- 🖥️ Create **Virtual Machines** (like physical servers)
+- 💾 Create **Storage Accounts** for large data workloads
+- 🌐 Deploy **Virtual Networks (VNets)** to connect and isolate resources
+
+---
+
+### 🚀 Getting Started with Azure CLI (Core Commands)
+
+#### 🗂️ 1) Create a Resource Group (to organize everything)
+
+```bash
+az group create --name GrupoRecursosIaaS --location eastus2
+```
+
+#### 🖥️ 2) Create a VM (Ubuntu example)
+
+```bash
+az vm create \
+  --resource-group GrupoRecursosIaaS \
+  --name iaas-vm-01 \
+  --image Ubuntu2204 \
+  --admin-username azureuser \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD"
+```
+
+> 🔐 Tip: For real projects, prefer SSH keys over passwords. Never commit real passwords to Git.
+
+#### 💾 3) Create a Storage Account (basic + low cost)
+
+```bash
+az storage account create \
+  --name storageiaas001 \
+  --resource-group GrupoRecursosIaaS \
+  --location eastus2 \
+  --sku Standard_LRS
+```
+
+#### 🌐 4) Create a Virtual Network (VNet + Subnet)
+
+```bash
+az network vnet create \
+  --resource-group GrupoRecursosIaaS \
+  --name IaaSVnet001 \
+  --address-prefix 10.0.0.0/16 \
+  --subnet-name IaaSSubnet001 \
+  --subnet-prefixes 10.0.0.0/24
+```
+
+---
+
+### 🧯 Common VM Error: SKU Not Available (Fix with `--size`)
+
+Sometimes Azure returns an error like `SkuNotAvailable` because the default VM size (e.g., `Standard_DS1_v2`) isn’t available in your chosen region.
+
+✅ Fix: specify a supported size explicitly, for example:
+
+```bash
+az vm create \
+  --resource-group GrupoRecursosIaaS \
+  --name iaas-vm-01 \
+  --image Ubuntu2204 \
+  --admin-username azureuser \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD" \
+  --size Standard_B1s
+```
+
+Example `Standard_B1s` characteristics:
+
+- 🧠 CPUs: 1
+- 🧮 RAM: ~1 GiB
+- ⚡ Baseline CPU performance: ~10%
+
+---
+
+### 🔎 View Resources from the Terminal
+
+```bash
+az group list --output table
+az vm list --output table
+```
+
+---
+
+### 🧹 Clean Up to Avoid Unexpected Charges
+
+At the end of each practice, delete the resource group (this deletes everything inside it):
+
+```bash
+az group delete --name GrupoRecursosIaaS --yes --no-wait
+```
+
+---
+
+### 📚 Class Resources
+
+The class command list is summarized here:
+
+- 🧾 [GitHub script: `comandos.sh`](https://github.com/platzi/AZ-900/blob/main/azureIaaS/comandos.sh)
+
+---
+
+### 📝 Class 12 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 AZURE CLI + IAAS LAB                     │
+├─────────────────────────────────────────────────────────┤
+│  🗂️ GROUP          │  Create a resource group             │
+│  🖥️ VM             │  Create VM (add --size if needed)    │
+│  💾 STORAGE         │  Standard_LRS for low-cost labs      │
+│  🌐 NETWORK         │  VNet + subnet for isolation         │
+│  🧹 CLEANUP         │  Delete RG to avoid charges          │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
