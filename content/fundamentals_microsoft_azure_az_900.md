@@ -708,5 +708,143 @@ Tags act like a compass in a large Azure estate—bringing clarity, governance, 
 
 ---
 
+## 🎓 Class 10: Create an Azure Storage Account + Automate Deployments with ARM Templates
+
+### 🧾 Summary: How Do I Create a Storage Account in Azure?
+
+To start using Azure services, you create resources based on your needs. One foundational resource is a **Storage Account**, which lets you store data in Microsoft’s cloud. ☁️💾
+
+---
+
+### 🏗️ Create a Storage Account (Portal)
+
+1. 🌐 Open the **Azure Portal** and select **Create**
+2. 🔎 Search for **Storage account** (using your portal language helps)
+3. 🧾 Select **Storage account** → **Create**
+4. ✅ Fill in the required fields:
+   - 🗂️ **Resource group**: select the one you’ll use for the course/lab
+   - 🏷️ **Storage account name**: must be **globally unique**
+   - 🌍 **Region**: preferably the same region as your resource group (and close to users)
+   - ⚙️ **Performance**: choose **Standard** for learning environments
+   - 💸 **Redundancy**: choose **Locally-redundant storage (LRS)** for the lowest cost option
+5. 🔍 Click **Review + create**
+6. 🚀 After validation passes, click **Create** → then **Go to resource**
+
+---
+
+### 🧩 Azure Naming Rules (Why Your Storage Account Name Might Fail)
+
+Azure validates the storage account name automatically. For storage accounts, the name is similar to a domain-style identifier:
+
+- ✅ Must be **unique**
+- 🚫 No uppercase letters
+- 🚫 Avoid special punctuation (Azure will reject invalid characters)
+
+📌 For learning: stick to the cheapest defaults (Standard + LRS). Premium options can generate unnecessary costs. 💰
+
+---
+
+### 🤖 What Are ARM Templates (and Why Automate)?
+
+After creating a resource, you can export its configuration as an **ARM template (Azure Resource Manager template)** to automate future deployments. This is extremely useful when you need to recreate similar resources repeatedly with small changes (like the name). 🔁
+
+#### ✅ Why automation matters
+
+- ⏱️ **Time savings**: no repeated clicking through forms
+- 🧱 **Consistency**: same configuration every time
+- 📈 **Scalability**: deploy many similar resources easily
+- 🧾 **Version control**: templates can live in Git
+- 🔄 **CI/CD ready**: integrate infra deployments into pipelines
+
+> 🧠 The portal is great for learning, but manual deployment doesn’t scale. Automation is how real environments are built.
+
+---
+
+### 📤 Export an ARM Template from an Existing Resource
+
+1. 📦 Open your **Storage account** resource
+2. 🧭 In the left menu, go to **Automation** (or **Automation** section)
+3. 📄 Select **Export template**
+4. ⬇️ Download the ZIP (often named something like `ExportedTemplate.zip`)
+5. 🗜️ Extract it—you’ll typically find:
+   - `template.json` (full resource definition)
+   - `parameters.json` (values you can change per deployment)
+
+#### 🧪 Simplified ARM template example (`template.json`)
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Storage account name"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-04-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "centralus",
+      "sku": { "name": "Standard_LRS" },
+      "kind": "StorageV2"
+    }
+  ]
+}
+```
+
+---
+
+### ♻️ Reuse an ARM Template for New Deployments (Portal)
+
+1. 🔎 Search for **Template deployment**
+2. 🧩 Open it and choose **Build your own template in the editor**
+3. ⬆️ Click **Load file** and upload your `template.json`
+4. 💾 Click **Save**
+5. 🧾 Fill in parameters (like a new unique storage account name) and deploy
+
+---
+
+### 💻 Deploy an ARM Template Using Azure CLI
+
+Supporting docs:
+
+- 📘 [az deployment group](https://learn.microsoft.com/en-us/cli/azure/deployment/group?view=azure-cli-latest)
+
+Commands:
+
+```bash
+az login
+az account set --subscription "YOUR_SUBSCRIPTION_NAME"
+
+az deployment group create \
+  --resource-group YOUR_RESOURCE_GROUP_NAME \
+  --template-file path/to/template.json \
+  --parameters path/to/parameters.json
+```
+
+✅ This automates repeat deployments—typically you only change parameters like the storage account name.
+
+---
+
+### 📝 Class 10 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│          STORAGE ACCOUNT + AUTOMATION (ARM)              │
+├─────────────────────────────────────────────────────────┤
+│  💾 STORAGE         │  Standard + LRS for low-cost labs    │
+│  🏷️ NAMING          │  Unique name, no uppercase/specials  │
+│  📤 EXPORT ARM       │  Automation → Export template        │
+│  ♻️ REDEPLOY         │  Template deployment / Azure CLI      │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
