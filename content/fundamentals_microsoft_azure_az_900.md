@@ -17,6 +17,7 @@
 - **[Class 11: Why Automate Infrastructure? (Azure CLI Basics)](#class-11)**
 - **[Class 12: Azure CLI + IaaS Lab](#class-12)**
 - **[Class 13: PaaS in Azure (Cosmos DB, SQL, Web Apps)](#class-13)**
+- **[Class 14: SaaS in Azure (WordPress Example)](#class-14)**
 
 ---
 
@@ -1247,6 +1248,91 @@ The commands used in this class are summarized here:
 │  🧱 APP PLAN         │  Required container for Web Apps     │
 │  🌐 WEB APP          │  Deploy apps without web servers     │
 │  🧾 PROVIDERS        │  Register DocumentDB/Sql/Web         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-14"></a>
+## 🎓 Class 14: Software as a Service (SaaS) in Azure (WordPress Example)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is the SaaS Model in Cloud Computing?
+
+**Software as a Service (SaaS)** is the most “hands-off” and convenient cloud model. Instead of provisioning servers, opening ports, installing software, and maintaining updates, you essentially **consume a ready-to-use application**. ✨
+
+Example: launching a WordPress site.
+
+- 🧱 Traditional approach: VM → install web server → configure WordPress → patch/maintain
+- 🪄 SaaS approach: a few clicks → WordPress is provisioned and ready
+
+---
+
+### 🧩 Shared Responsibility Model (Where SaaS Fits)
+
+This diagram shows how responsibilities shift across **On-prem → IaaS → PaaS → SaaS** (customer vs provider vs shared):
+
+![Shared responsibility model across SaaS/PaaS/IaaS/On-prem](assets/shared-responsibility-model.png)
+
+---
+
+### 📝 How to Configure a WordPress Site with SaaS in Azure
+
+You don’t need to be a developer or a server admin to do this. 👇
+
+1. 🌐 Go to the **Azure Portal** and click **Create a resource**
+2. 🔎 Search for **WordPress** and select the option provided by **Microsoft** (recommended templates)
+3. 🗂️ Create/select a Resource Group (example name: `GrupoSaaS`)
+4. ⚙️ Complete the configuration:
+   - 🌍 Choose a site name (this becomes part of the URL)
+   - 📦 Select a hosting plan
+   - 🗣️ Choose site language
+   - 🔐 Configure admin credentials
+   - 🧩 Enable required add-ons if prompted (e.g., managed identities, Azure communication services)
+5. ✅ Click **Review + create** → then **Create**
+
+In a few minutes, Azure will deploy and configure the underlying resources and your WordPress site will be ready. 🚀
+
+---
+
+### ✅ Benefits of Using SaaS to Deploy Applications
+
+- ⚡ **Speed & simplicity**: near-instant setup with minimal steps
+- 🏭 **Industry-ready solutions**: many SaaS offerings come preconfigured for specific industries
+- 🧰 **Less technical overhead**: provider handles servers, databases, and often licensing
+- 📈 **Easy scaling**: grow as your traffic and needs grow
+
+---
+
+### 🧱 What Resources Can a SaaS Deployment Create Behind the Scenes?
+
+Even if you click “Create” once, a SaaS solution can provision multiple components automatically, such as:
+
+- 🌐 **Networking**: CDN, DNS zones, network components
+- 🛡️ **Security & management**: secure endpoints, managed identities, access controls
+- ⚙️ **Operational services**: monitoring/telemetry depending on the offer
+
+---
+
+### 🧠 Best Practices When Working with SaaS
+
+- 🗂️ **Use resource groups** to keep deployments organized
+- 🔍 **Review resources periodically** and remove what you don’t use (optimize cost)
+- 🔐 **Keep access secure**: review identities/permissions regularly
+
+---
+
+### 📝 Class 14 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     SAAS IN AZURE                         │
+├─────────────────────────────────────────────────────────┤
+│  🪄 FAST DEPLOY     │  Apps ready with minimal setup       │
+│  🧩 RESPONSIBILITY  │  Provider owns more in SaaS          │
+│  🗂️ ORGANIZATION     │  Use resource groups                │
+│  🔐 SECURITY         │  Review identities & access         │
 └─────────────────────────────────────────────────────────┘
 ```
 
