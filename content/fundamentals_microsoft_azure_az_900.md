@@ -18,6 +18,7 @@
 - **[Class 12: Azure CLI + IaaS Lab](#class-12)**
 - **[Class 13: PaaS in Azure (Cosmos DB, SQL, Web Apps)](#class-13)**
 - **[Class 14: SaaS in Azure (WordPress Example)](#class-14)**
+- **[Class 15: Choosing the Right Azure Region](#class-15)**
 
 ---
 
@@ -1333,6 +1334,93 @@ Even if you click “Create” once, a SaaS solution can provision multiple comp
 │  🧩 RESPONSIBILITY  │  Provider owns more in SaaS          │
 │  🗂️ ORGANIZATION     │  Use resource groups                │
 │  🔐 SECURITY         │  Review identities & access         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-15"></a>
+## 🎓 Class 15: Choosing the Right Region for Your Azure Datacenters
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Choose the Right Region for My Datacenters?
+
+Choosing an Azure region isn’t just about “closest to me.” With **dozens of Azure regions** and **hundreds of datacenters** globally, region selection becomes a strategic decision that impacts **latency**, **compliance**, **availability**, and **service features**. 🌍⚡
+
+---
+
+### 🗺️ Where Can I Find Official Datacenter/Region Information?
+
+Two great starting points:
+
+- 🌐 **Interactive globe** (regions + details): [Microsoft Datacenters - Explore the globe](https://datacenters.microsoft.com/globe/explore/)
+- 🧭 **Azure Global Infrastructure** overview: [Azure global infrastructure](https://azure.microsoft.com/es-es/explore/global-infrastructure)
+
+These views help you validate:
+
+- 📍 Region locations
+- 🏅 Certifications/compliance info
+- 🗓️ When regions opened (helpful historical context)
+- 🧩 Whether regions support Availability Zones (where applicable)
+
+Extra (handy reference list):
+
+- 🏷️ [Current Azure region names reference](https://azuretracks.com/2021/04/current-azure-region-names-reference/)
+
+---
+
+### 🏅 Why Do Datacenter Certifications Matter?
+
+Certifications help ensure datacenters meet standards for **security**, **quality**, and sometimes **energy efficiency**. 🔐  
+If you handle sensitive data or regulated workloads, choosing regions with the right certifications can be critical.
+
+---
+
+### 👥 How to Choose a Region Based on Your Audience
+
+Your end users’ location is often the #1 driver for great UX:
+
+- 📱 If your users are in Asia, placing workloads closer to them can reduce latency—even if your team sits in another country.
+- ⚡ Lower latency typically means faster page loads and better responsiveness.
+
+---
+
+### 🧩 How Service Availability Influences Region Choice
+
+Not every Azure service is available in every region. Some features may be:
+
+- ✅ Generally available (GA)
+- 🧪 In public preview
+- 🚫 Not available at all in a given region
+
+So your region choice should balance:
+
+- 📍 proximity to users
+- 🧰 required service availability
+- 🏅 compliance/certification needs
+
+---
+
+### 🧾 Recommendations (Region Selection Checklist)
+
+- 🏅 **Check certifications** when security/compliance is a priority
+- 👥 **Pick regions close to users** to reduce latency
+- 🧩 **Verify services are available** in your target region(s)
+- ⚖️ **Balance cost, performance, and requirements** (don’t optimize only for distance)
+
+---
+
+### 📝 Class 15 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│               AZURE REGION SELECTION                      │
+├─────────────────────────────────────────────────────────┤
+│  👥 USERS          │  Choose regions near your audience    │
+│  🧩 SERVICES       │  Ensure required services exist       │
+│  🏅 COMPLIANCE     │  Validate certifications/requirements │
+│  🗺️ TOOLS          │  Use globe + infra pages             │
 └─────────────────────────────────────────────────────────┘
 ```
 
