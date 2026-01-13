@@ -19,6 +19,7 @@
 - **[Class 13: PaaS in Azure (Cosmos DB, SQL, Web Apps)](#class-13)**
 - **[Class 14: SaaS in Azure (WordPress Example)](#class-14)**
 - **[Class 15: Choosing the Right Azure Region](#class-15)**
+- **[Class 16: Scalability + High Availability](#class-16)**
 
 ---
 
@@ -1421,6 +1422,98 @@ So your region choice should balance:
 │  🧩 SERVICES       │  Ensure required services exist       │
 │  🏅 COMPLIANCE     │  Validate certifications/requirements │
 │  🗺️ TOOLS          │  Use globe + infra pages             │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-16"></a>
+## 🎓 Class 16: Scalability in the Cloud (Vertical, Horizontal) + High Availability
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Scalability in the Cloud and How Do You Implement It?
+
+Scalability is one of the most important cloud benefits. It means your application can handle more load by adjusting the resources it uses—without redesigning everything from scratch. 📈☁️
+
+In Azure, scalability becomes much more accessible because you can scale up/down or out/in based on real demand. ✅
+
+Class commands reference:
+
+- 🧾 [GitHub script: `escalabilidad/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/escalabilidad/comandos.sh)
+
+---
+
+### ⬆️ Vertical Scaling (Scale Up)
+
+**Vertical scalability** means giving **one instance** more power (CPU/RAM). Think: “bigger machine.” 🧠💪
+
+Typical App Service flow (examples):
+
+```bash
+az group create --name grupo-recursos-escalables --location eastus
+az appservice plan create --name myAppServicePlan --resource-group grupo-recursos-escalables --sku P1v2
+az webapp create --resource-group grupo-recursos-escalables --plan myAppServicePlan --name myUniqueAppName
+```
+
+Then you can move the plan/tier to get more compute (depending on the service). 📦
+
+---
+
+### ➡️ Horizontal Scaling (Scale Out)
+
+**Horizontal scalability** means adding **more instances** (replicas) of the same app/service to share the traffic. Think: “more machines.” 🧩🧩🧩
+
+In Azure, you can configure **autoscale rules**, for example:
+
+- 🔥 Add an instance when CPU > **70%**
+- 🧊 Remove an instance when CPU drops below a threshold
+
+This is ideal for traffic spikes because it keeps performance stable without overpaying all month. ⚡💸
+
+---
+
+### 🟦 High Availability (HA) + Zone Redundancy
+
+**High availability** means your app stays reachable even if parts of the infrastructure fail. 🛡️
+
+One common strategy is distributing instances across **Availability Zones** inside a region:
+
+- 🏢 “Zone redundancy enabled” means instances are deployed across multiple datacenter zones
+- ✅ If one zone fails, others can continue serving traffic
+- 📌 Some plans require a minimum number of instances (often **3**) to support zone redundancy
+
+---
+
+### 🧠 Key Definitions
+
+- **Instance**: a running copy/replica of your app or service (used for horizontal scaling).
+- **Zone redundancy**: distribution across multiple zones to improve resilience inside a region.
+
+---
+
+### 🧹 Cost Tip: Always Clean Up
+
+Scaling is powerful, but leaving resources running can cause surprise charges. After practice, delete what you don’t need. 🧾
+
+Example:
+
+```bash
+az group delete --name grupo-recursos-escalables --yes --no-wait
+```
+
+---
+
+### 📝 Class 16 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│            SCALABILITY + HIGH AVAILABILITY               │
+├─────────────────────────────────────────────────────────┤
+│  ⬆️ VERTICAL        │  More CPU/RAM for one instance       │
+│  ➡️ HORIZONTAL      │  More instances (replicas)           │
+│  🟦 ZONE REDUNDANCY │  Instances across multiple zones     │
+│  🧹 CLEANUP         │  Delete resources to avoid costs     │
 └─────────────────────────────────────────────────────────┘
 ```
 
