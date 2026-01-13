@@ -1065,5 +1065,140 @@ The class command list is summarized here:
 
 ---
 
+## 🎓 Class 13: Platform as a Service (PaaS) in Azure (Cosmos DB, SQL, Web Apps)
+
+### 🧾 Summary: What Is Platform as a Service (PaaS) in Azure?
+
+**Platform as a Service (PaaS)** is a big upgrade in how you deploy applications. Instead of managing servers (OS, ports, patches, web servers like Nginx/IIS/Apache), you focus on your app—and Azure handles the platform layer. 🚀
+
+With Azure PaaS, you can launch services faster, reduce operational overhead, and scale more easily. ☁️⚙️
+
+---
+
+### 🌍 Before You Start: Register Required Resource Providers (One-time Setup)
+
+Sometimes your subscription needs the provider registered before you can create certain resources. This has **no extra cost**—it’s an administrative enablement step. ✅
+
+Register providers:
+
+```bash
+az provider register --namespace Microsoft.DocumentDB
+az provider register --namespace Microsoft.Sql
+az provider register --namespace Microsoft.Web
+```
+
+Check registration status (repeat per provider as needed):
+
+```bash
+az provider show -n Microsoft.DocumentDB --query "registrationState"
+```
+
+⏳ It can take a few minutes until the state becomes `Registered`.
+
+---
+
+### 🧩 How to Deploy a Non-Relational Database with Cosmos DB
+
+**Azure Cosmos DB** is one of Azure’s flagship managed NoSQL services. Instead of spinning up a VM and installing a database manually, you can provision a managed database with a single command. 🗃️✨
+
+```bash
+az cosmosdb create --name cosmospaas123 --resource-group GrupoRecursosPaaS
+```
+
+---
+
+### 🗄️ How to Create a Cloud SQL Server with Azure CLI
+
+Creating an Azure SQL server via CLI avoids OS-level management and the “local install” headaches. ✅  
+Use a strong admin username (avoid overly common usernames) and a strong password (don’t store it in git). 🔐
+
+```bash
+az sql server create \
+  --location eastus2 \
+  --resource-group GrupoRecursosPaaS \
+  --name serverPaas006 \
+  --admin-user sqladminuser \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD"
+```
+
+---
+
+### 🧱 What Is an App Service Plan (and Why Do You Need It)?
+
+An **App Service Plan** is the “container” that defines the compute resources your Web App will run on (pricing tier, region, scaling).  
+You **must create a plan first** before deploying a Web App. 📦✅
+
+```bash
+az appservice plan create -g GrupoRecursosPaaS -n aminWebPlan --location eastus2 --sku F1
+```
+
+---
+
+### 🌐 How to Deploy a Web App in Azure
+
+Once your plan exists, you can create a Web App without configuring a web server manually. 🎯
+
+```bash
+az webapp create -g GrupoRecursosPaaS -p aminWebPlan -n mypaaswebapp001
+```
+
+---
+
+### ⚠️ Common Issue: “This region has quota of 0 instances…” (Fix)
+
+You might see an error like:
+
+> “This region has quota of 0 instances for your subscription. Try selecting different region or SKU.”
+
+✅ Fix options:
+
+- 🌍 **Switch region** (example: `westus`, `eastus`)
+- 🧾 **Switch SKU** (example: `B1` instead of free tier)
+
+Examples:
+
+```bash
+az appservice plan create -g GrupoRecursosPaaS -n aminWebPlan --location westus --sku F1
+```
+
+```bash
+az appservice plan create -g GrupoRecursosPaaS -n aminWebPlan --location eastus --sku B1
+```
+
+---
+
+### ⭐ Benefits of Using PaaS in Azure
+
+- ✅ **Ease of use**: less infrastructure configuration
+- 📈 **Scalability**: adjust resources to demand
+- 💸 **Cost efficiency**: pay for what you use (choose the right tier)
+- 🧰 **Simplified operations**: fewer backend maintenance tasks
+
+---
+
+### 📚 Class Resources
+
+The commands used in this class are summarized here:
+
+- 🧾 [GitHub script: `azurePaaS/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/azurePaaS/comandos.sh)
+
+---
+
+### 📝 Class 13 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE PAAS BASICS                     │
+├─────────────────────────────────────────────────────────┤
+│  🗃️ COSMOS DB       │  Managed NoSQL provisioning          │
+│  🗄️ SQL SERVER      │  Create cloud SQL without OS mgmt    │
+│  🧱 APP PLAN         │  Required container for Web Apps     │
+│  🌐 WEB APP          │  Deploy apps without web servers     │
+│  🧾 PROVIDERS        │  Register DocumentDB/Sql/Web         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
