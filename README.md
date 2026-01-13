@@ -9,6 +9,7 @@ Notes, conten and code for Azure courses
 ## Azure tools
 
 * [Azure Pricing Calculator](https://azure.microsoft.com/es-es/pricing/calculator/) - Estimate costs for Azure services
+* [Azure Products Catalog](https://azure.microsoft.com/es-es/products) - Browse all Azure products (200+ services)
 
 ### Other links
 

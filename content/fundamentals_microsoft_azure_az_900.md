@@ -539,5 +539,172 @@ Explore, test, and iterate so you can choose the best tools for your projects. �
 
 ---
 
+## 🎓 Class 8: What’s Hidden in the Azure Portal “Containers” Category?
+
+### 🧾 Summary: What Does the Azure Portal Hide in the Containers Category?
+
+Exploring Azure can be exciting! 🎉 But here’s a key tip: sometimes there are **more services available than what the portal shows at first glance**. For example, when you open the **Containers** area in the Azure Portal, it may look like there are only a couple of options—but the broader Azure catalog reveals many more container-related services. 👀📦
+
+#### 🔗 Azure Products catalog (official)
+
+- 🧩 **Azure Products**: [Browse all Azure products](https://azure.microsoft.com/es-es/products)
+
+---
+
+### 📦 Where Can You Find All Available Container Services?
+
+On the Azure Products site, services are organized similarly to the portal. When you select the **Containers** category, you’ll see **many more options** than what’s immediately visible in the portal UI.
+
+Also note: some services can appear under multiple categories. For example, **Azure Kubernetes Service (AKS)** may show up in more than one place depending on how Microsoft groups services. That’s normal—and the catalog helps you find the “full list” faster. 🗂️✅
+
+---
+
+### 🚀 How to Get Started with Azure Container Apps
+
+**Azure Container Apps** is a powerful and popular option in Azure. Once you select it from the catalog, you’ll typically find a richer set of resources such as:
+
+- 🆚 Container comparisons
+- ⚡ Quickstarts / getting-started guides
+- 📘 Documentation links
+
+This helps you learn faster and get the most out of both the portal and the online docs. 🧠
+
+---
+
+### 📚 Why Microsoft Learn Documentation Matters
+
+Here’s a cool Azure reality: sometimes **documentation is available even before a product reaches general availability (GA)**. That often happens with services in **preview**—you can still access lots of learning material and references early. 🧪📄
+
+Microsoft invests heavily in detailed documentation on **Microsoft Learn**, so you can explore deeply and be ready to implement new tools when they’re fully released. ✅
+
+---
+
+### 🧰 How Can Azure Documentation Help You?
+
+Good docs don’t just describe products—they teach you how to use them:
+
+- 🔮 Prepares you for upcoming releases
+- 🏗️ Offers strategies and patterns for implementation
+- 🧭 Gives you a reliable reference even while features evolve
+
+---
+
+### 💡 Recommendations to Get the Most Out of Azure
+
+- 🧩 **Explore the full catalog** using the Azure Products link
+- 📚 **Strengthen your knowledge with Microsoft Learn docs**
+- 🎯 **Specialize in a favorite tool** (like Azure Container Apps) and go deep
+- 🔄 **Stay current** by continuing your learning and experimenting
+
+> 🚀 Azure has an impressive ecosystem of tools and documentation—keep exploring and you’ll always be one step ahead.
+
+---
+
+### 📝 Class 8 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                CONTAINERS IN AZURE                        │
+├─────────────────────────────────────────────────────────┤
+│  👀 HIDDEN OPTIONS  │  Portal shows some, catalog shows all │
+│  🧩 PRODUCTS PAGE   │  Browse container services by category │
+│  🚀 CONTAINER APPS  │  Quickstarts + comparisons + guides   │
+│  📚 DOCS EARLY       │  Learn even during preview phases     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🎓 Class 9: Improve Resource Management in Azure with Tags
+
+### 🧾 Summary: How Can I Improve Resource Management in Azure with Tags?
+
+In cloud environments—especially on platforms like Azure—keeping resources well-organized is critical. One simple (and often underrated) superpower is **tags**. 🏷️  
+Tags help you categorize, search, govern, and manage resources at scale, making your Azure environment easier to understand and operate. 📌
+
+---
+
+### 🏷️ What Are Azure Tags and How Do You Create Them?
+
+**Tags are metadata applied to Azure resources.** They are **key-value pairs** that help identify resources based on your own classification.
+
+When you create a resource (for example, a **Resource Group**), you typically define:
+
+- 🏷️ **Name**
+- 🌍 **Region/location** (ideally close to the people/apps that will use it)
+
+Then you can add **tags** as extra context.
+
+Example:
+
+- 📦 Resource group name: `my-first-rg`
+- 🔑 Tag key: `environment`
+- 🧪 Tag value: `testing`
+
+This makes it instantly clear that the resources inside are meant for experiments or learning. ✅
+
+> 💡 In the Azure Portal, tags often show in the resource overview. If you don’t see them immediately, it can sometimes be a UI/zoom/layout issue—scrolling or adjusting zoom may reveal the section.
+
+---
+
+### ⭐ Why Are Tags Important in Azure?
+
+Tags help you:
+
+- 🎯 **Understand purpose fast**: know what a resource is for without guessing
+- 🧪 **Spot “temporary” resources**: identify volatile/learning resources (e.g., `testing`, `dev`)
+- 🔎 **Search and filter efficiently**: quickly find and manage resources across your subscription(s)
+
+---
+
+### 🏢 What’s the Business Value of Tags?
+
+Tags are extremely flexible—each organization can adapt them to its needs. Common enterprise patterns include:
+
+- 🧪 **Environment**: `dev`, `test`, `prod`
+- 👤 **Owner / team**: who is responsible for the resource
+- 🧾 **Cost tracking**: `CostCenter`, `Client`, `Project`
+- 🛡️ **Security classification**: `Confidential`, `Public`
+
+Tags act like a compass in a large Azure estate—bringing clarity, governance, and better cost transparency. 🧭
+
+---
+
+### ⚠️ Important Notes (Microsoft Learn-style guidance)
+
+- 🔑 **Tags are key-value pairs** used for identification and organization
+- 📝 **Tags are stored as plain text** → **do not put secrets or sensitive data in tags**
+- 🌐 **Be careful using non-English languages** in tags in some contexts (it can occasionally cause decoding/progress issues depending on tooling and integrations)
+- 🔤 **Tag names are case-insensitive** for operations (treat `Owner` and `owner` as the same key)
+- 🚫 **Tag names can’t contain certain characters**: `<`, `>`, `%`, `&`, `` ` ``, `?`, `/`
+
+---
+
+### 🎯 Best Uses of Tags in Azure
+
+- 🏛️ **Organization & governance**: classify by environment, project, department
+- 💸 **Cost control**: add `Owner` / `CostCenter` to track spend by team/client
+- 🛡️ **Security & compliance**: classify sensitivity and enforce rules
+- 🤖 **Automation & management**: filter/apply policies using **Azure Policy** or Automation based on tags
+
+📌 Recommendation: define a clear convention (`key:value`), tag all important resources consistently, and avoid “tag spam” that no one maintains. ✅
+
+---
+
+### 📝 Class 9 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE TAGS                            │
+├─────────────────────────────────────────────────────────┤
+│  🏷️ METADATA       │  Key-value pairs for resources       │
+│  🔎 SEARCH          │  Filter & find resources fast        │
+│  💸 COST            │  Track spend by owner/cost center    │
+│  🛡️ GOVERNANCE      │  Enforce rules with policy/automation │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
 *📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 
