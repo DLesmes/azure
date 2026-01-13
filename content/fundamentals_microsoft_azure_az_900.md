@@ -2,8 +2,24 @@
 
 > [Course content repository](https://github.com/platzi/AZ-900) - All course notes and materials in this repo
 
+## 🧭 Table of Contents (click to navigate)
+
+- **[Class 2: Cloud Comparison - Private, Public & Hybrid](#class-2)**
+- **[Class 3: Costs and Benefits of Azure Cloud Solutions](#class-3)**
+- **[Class 4: How to Create an Azure Account Securely](#class-4)**
+- **[Class 5: Installing Azure CLI + First Login](#class-5)**
+- **[Class 6: Monitoring and Managing Your Costs in Azure](#class-6)**
+- **[Class 7: Navigating the Azure Portal](#class-7)**
+- **[Class 8: Azure Containers Category (Hidden Options)](#class-8)**
+- **[Class 9: Improve Resource Management with Tags](#class-9)**
+- **[Class 10: Storage Account + ARM Template Automation](#class-10)**
+- **[Class 11: Why Automate Infrastructure? (Azure CLI Basics)](#class-11)**
+- **[Class 12: Azure CLI + IaaS Lab](#class-12)**
+- **[Class 13: PaaS in Azure (Cosmos DB, SQL, Web Apps)](#class-13)**
+
 ---
 
+<a id="class-2"></a>
 ## 🎓 Class 2: Cloud Comparison - Private, Public & Hybrid
 
 ### ☁️ What is the Cloud and How Many Types Exist?
@@ -94,6 +110,7 @@ The choice between a private, public, or hybrid cloud depends on various factors
 
 ---
 
+<a id="class-3"></a>
 ## 🎓 Class 3: Costs and Benefits of Azure Cloud Solutions
 
 ### 💭 How Can a Cloud Solution Help You and When Can It Hurt You?
@@ -190,6 +207,7 @@ Exploring example scenarios in the Azure calculator allows you to forecast archi
 
 ---
 
+<a id="class-4"></a>
 ## 🎓 Class 4: How to Create an Azure Account Securely
 
 ### 🔐 How to Create an Azure Account Securely?
@@ -260,6 +278,7 @@ By default, Azure may appear in English, but you can change it easily:
 
 ---
 
+<a id="class-5"></a>
 ## 🎓 Class 5: Installing Azure CLI (Windows, macOS, Ubuntu/Debian) + First Login
 
 ### 🧾 Summary: How to Install Azure CLI on Different Operating Systems?
@@ -360,6 +379,7 @@ az account show
 
 ---
 
+<a id="class-6"></a>
 ## 🎓 Class 6: Monitoring and Managing Your Costs in Azure
 
 ### 🧾 Summary: How to Monitor and Manage Your Costs in Azure?
@@ -459,6 +479,7 @@ Example:
 
 ---
 
+<a id="class-7"></a>
 ## 🎓 Class 7: Navigating the Azure Portal
 
 ### 🧾 Summary: How Do You Navigate the Azure Portal?
@@ -541,6 +562,7 @@ Explore, test, and iterate so you can choose the best tools for your projects. �
 
 ---
 
+<a id="class-8"></a>
 ## 🎓 Class 8: What’s Hidden in the Azure Portal “Containers” Category?
 
 ### 🧾 Summary: What Does the Azure Portal Hide in the Containers Category?
@@ -617,6 +639,7 @@ Good docs don’t just describe products—they teach you how to use them:
 
 ---
 
+<a id="class-9"></a>
 ## 🎓 Class 9: Improve Resource Management in Azure with Tags
 
 ### 🧾 Summary: How Can I Improve Resource Management in Azure with Tags?
@@ -708,6 +731,7 @@ Tags act like a compass in a large Azure estate—bringing clarity, governance, 
 
 ---
 
+<a id="class-10"></a>
 ## 🎓 Class 10: Create an Azure Storage Account + Automate Deployments with ARM Templates
 
 ### 🧾 Summary: How Do I Create a Storage Account in Azure?
@@ -846,6 +870,7 @@ az deployment group create \
 
 ---
 
+<a id="class-11"></a>
 ## 🎓 Class 11: Why Automate Infrastructure in Azure? (Azure CLI Basics)
 
 ### 🧾 Summary: Why Do We Need to Automate Infrastructure in Azure?
@@ -936,6 +961,7 @@ Recommended resource:
 
 ---
 
+<a id="class-12"></a>
 ## 🎓 Class 12: Using Azure from the Command Line (Azure CLI + IaaS Lab)
 
 ### 🧾 Summary: How Do I Use Azure with the Command Line?
@@ -1065,6 +1091,7 @@ The class command list is summarized here:
 
 ---
 
+<a id="class-13"></a>
 ## 🎓 Class 13: Platform as a Service (PaaS) in Azure (Cosmos DB, SQL, Web Apps)
 
 ### 🧾 Summary: What Is Platform as a Service (PaaS) in Azure?
