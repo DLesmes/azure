@@ -1,5 +1,7 @@
 # 📘 Microsoft Azure Fundamentals (AZ-900) Course
 
+> [Course content repository](https://github.com/platzi/AZ-900) - All course notes and materials in this repo
+
 ---
 
 ## 🎓 Class 2: Cloud Comparison - Private, Public & Hybrid
