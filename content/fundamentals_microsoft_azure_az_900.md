@@ -2,6 +2,7 @@
 
 > [Course content repository](https://github.com/platzi/AZ-900) - All course notes and materials in this repo
 
+<a id="toc"></a>
 ## 🧭 Table of Contents (click to navigate)
 
 - **[Class 2: Cloud Comparison - Private, Public & Hybrid](#class-2)**
@@ -21,6 +22,8 @@
 
 <a id="class-2"></a>
 ## 🎓 Class 2: Cloud Comparison - Private, Public & Hybrid
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### ☁️ What is the Cloud and How Many Types Exist?
 
@@ -112,6 +115,8 @@ The choice between a private, public, or hybrid cloud depends on various factors
 
 <a id="class-3"></a>
 ## 🎓 Class 3: Costs and Benefits of Azure Cloud Solutions
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 💭 How Can a Cloud Solution Help You and When Can It Hurt You?
 
@@ -210,6 +215,8 @@ Exploring example scenarios in the Azure calculator allows you to forecast archi
 <a id="class-4"></a>
 ## 🎓 Class 4: How to Create an Azure Account Securely
 
+⬅️ [Back to Table of Contents](#toc)
+
 ### 🔐 How to Create an Azure Account Securely?
 
 Starting your Azure cloud journey can be exciting—and maybe a bit intimidating—especially when it comes to your account’s initial setup. Here’s a detailed, reliable guide to configure your Azure account securely and efficiently, while maximizing the benefits available to you.
@@ -280,6 +287,8 @@ By default, Azure may appear in English, but you can change it easily:
 
 <a id="class-5"></a>
 ## 🎓 Class 5: Installing Azure CLI (Windows, macOS, Ubuntu/Debian) + First Login
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 🧾 Summary: How to Install Azure CLI on Different Operating Systems?
 
@@ -382,6 +391,8 @@ az account show
 <a id="class-6"></a>
 ## 🎓 Class 6: Monitoring and Managing Your Costs in Azure
 
+⬅️ [Back to Table of Contents](#toc)
+
 ### 🧾 Summary: How to Monitor and Manage Your Costs in Azure?
 
 Cost management in Azure is a key skill for any IT professional. Estimating costs and keeping cloud resources under control helps you use your budget efficiently **and** maintain optimal system performance. While the Azure Pricing Calculator is a great starting point, real usage can differ—so learning where to monitor actual spend in the Azure Portal is essential. 💸📊
@@ -482,6 +493,8 @@ Example:
 <a id="class-7"></a>
 ## 🎓 Class 7: Navigating the Azure Portal
 
+⬅️ [Back to Table of Contents](#toc)
+
 ### 🧾 Summary: How Do You Navigate the Azure Portal?
 
 The Azure Portal is a powerful tool for managing and deploying cloud resources. With **nearly 200 services** available, it can feel overwhelming at first—and that’s completely normal. 😅  
@@ -565,6 +578,8 @@ Explore, test, and iterate so you can choose the best tools for your projects. �
 <a id="class-8"></a>
 ## 🎓 Class 8: What’s Hidden in the Azure Portal “Containers” Category?
 
+⬅️ [Back to Table of Contents](#toc)
+
 ### 🧾 Summary: What Does the Azure Portal Hide in the Containers Category?
 
 Exploring Azure can be exciting! 🎉 But here’s a key tip: sometimes there are **more services available than what the portal shows at first glance**. For example, when you open the **Containers** area in the Azure Portal, it may look like there are only a couple of options—but the broader Azure catalog reveals many more container-related services. 👀📦
@@ -641,6 +656,8 @@ Good docs don’t just describe products—they teach you how to use them:
 
 <a id="class-9"></a>
 ## 🎓 Class 9: Improve Resource Management in Azure with Tags
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 🧾 Summary: How Can I Improve Resource Management in Azure with Tags?
 
@@ -733,6 +750,8 @@ Tags act like a compass in a large Azure estate—bringing clarity, governance, 
 
 <a id="class-10"></a>
 ## 🎓 Class 10: Create an Azure Storage Account + Automate Deployments with ARM Templates
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 🧾 Summary: How Do I Create a Storage Account in Azure?
 
@@ -873,6 +892,8 @@ az deployment group create \
 <a id="class-11"></a>
 ## 🎓 Class 11: Why Automate Infrastructure in Azure? (Azure CLI Basics)
 
+⬅️ [Back to Table of Contents](#toc)
+
 ### 🧾 Summary: Why Do We Need to Automate Infrastructure in Azure?
 
 Infrastructure automation isn’t just a trend—it’s a necessity in modern development environments. 🚀  
@@ -963,6 +984,8 @@ Recommended resource:
 
 <a id="class-12"></a>
 ## 🎓 Class 12: Using Azure from the Command Line (Azure CLI + IaaS Lab)
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 🧾 Summary: How Do I Use Azure with the Command Line?
 
@@ -1093,6 +1116,8 @@ The class command list is summarized here:
 
 <a id="class-13"></a>
 ## 🎓 Class 13: Platform as a Service (PaaS) in Azure (Cosmos DB, SQL, Web Apps)
+
+⬅️ [Back to Table of Contents](#toc)
 
 ### 🧾 Summary: What Is Platform as a Service (PaaS) in Azure?
 
