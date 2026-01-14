@@ -21,6 +21,7 @@
 - **[Class 15: Choosing the Right Azure Region](#class-15)**
 - **[Class 16: Scalability + High Availability](#class-16)**
 - **[Class 17: Managing Subscriptions + Access (IAM/RBAC)](#class-17)**
+- **[Class 18: Getting the Most from Access Control (Scopes + Least Privilege)](#class-18)**
 
 ---
 
@@ -1608,6 +1609,93 @@ If the email you enter doesn’t appear (or Azure says it doesn’t exist), chec
 │  🔐 IAM / RBAC       │  Control who can do what             │
 │  🎭 ROLES            │  Assign Contributor/Reader/etc.      │
 │  🆘 TROUBLESHOOT     │  Member not found → check tenant     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-18"></a>
+## 🎓 Class 18: Getting the Most from Access Control in Azure
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Can I Take Advantage of Access Control in Azure?
+
+Access management in Azure gives you a powerful toolbox to control permissions precisely. At first it can feel complex—but it’s absolutely learnable with the right mental model. 🧠🔐  
+Azure access control lets you grant permissions at different **scopes**, from a whole subscription down to a single resource.
+
+---
+
+### 🔐 What Is Access Control in Azure?
+
+Azure uses **RBAC (Role-Based Access Control)** to define what a user/group/service can do. You’ll commonly see roles like:
+
+- ✍️ **Contributor**: broad permissions to create and manage resources (but not grant access)
+- 👀 **Reader**: view-only access
+
+---
+
+### 🧭 Where Can You Assign Roles? (Scopes)
+
+You can assign roles at different levels depending on how much access someone needs:
+
+- 🧾 **Subscription scope**: access across the entire subscription  
+  Example: a contributor at this scope can create resources and even create new resource groups.
+- 🗂️ **Resource group scope**: access limited to a specific resource group  
+  Great for project teams that should only touch one workload.
+- 🧩 **Resource scope**: access only to one specific resource  
+  Perfect when someone needs access to *just* one thing (e.g., one storage account).
+
+📌 Best practice: choose the smallest scope that still gets the job done. 🎯
+
+---
+
+### 🛡️ What Is the Principle of Least Privilege?
+
+**Least privilege** means giving identities only the permissions they need—no more. ✅  
+This reduces risk and limits blast radius if something goes wrong.
+
+---
+
+### 🧪 Practical Example: Integrating Azure Services with RBAC
+
+Imagine:
+
+- ☸️ You have a Kubernetes cluster in one resource group
+- 📦 You have an Azure Container Registry (ACR) in another resource group
+
+You can grant the cluster (or its managed identity) a minimal role such as:
+
+- 📥 **ACR Pull**: allows pulling container images, without allowing pushes or admin actions
+
+This enables the integration while staying secure and least-privileged. 🔒
+
+---
+
+### 🧰 Explore Available Roles
+
+Azure has a large ecosystem of built-in roles with specific permissions. The portal makes it easy to browse roles and pick the best fit for your org’s needs. 🧭
+
+---
+
+### 🏁 Key Takeaways
+
+- 🧾 Assign roles at the right scope (subscription / RG / resource)
+- 🎯 Prefer least privilege to reduce risk
+- 🧩 Use specialized roles (like **ACR Pull**) for service-to-service access
+
+---
+
+### 📝 Class 18 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                AZURE ACCESS CONTROL (RBAC)               │
+├─────────────────────────────────────────────────────────┤
+│  🧭 SCOPES          │  Subscription / RG / Resource        │
+│  🎭 ROLES           │  Contributor / Reader / specialized  │
+│  🎯 LEAST PRIVILEGE │  Give only what's necessary          │
+│  🧩 INTEGRATION     │  Example: ACR Pull for image access   │
 └─────────────────────────────────────────────────────────┘
 ```
 
