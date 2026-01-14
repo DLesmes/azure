@@ -20,6 +20,7 @@
 - **[Class 14: SaaS in Azure (WordPress Example)](#class-14)**
 - **[Class 15: Choosing the Right Azure Region](#class-15)**
 - **[Class 16: Scalability + High Availability](#class-16)**
+- **[Class 17: Managing Subscriptions + Access (IAM/RBAC)](#class-17)**
 
 ---
 
@@ -1514,6 +1515,99 @@ az group delete --name grupo-recursos-escalables --yes --no-wait
 │  ➡️ HORIZONTAL      │  More instances (replicas)           │
 │  🟦 ZONE REDUNDANCY │  Instances across multiple zones     │
 │  🧹 CLEANUP         │  Delete resources to avoid costs     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-17"></a>
+## 🎓 Class 17: Managing Azure Subscriptions Effectively (Access Control / IAM)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Manage Azure Subscriptions Effectively?
+
+In real-world Azure environments, managing a subscription isn’t just about creating resources—it’s also about **controlling who can do what**. Many organizations have a dedicated subscription admin, but it’s still essential to understand access control—especially if you *are* the admin. 🔐
+
+Azure uses **RBAC (Role-Based Access Control)** via **Access control (IAM)** to assign permissions at different scopes (subscription, resource group, resource). ✅
+
+---
+
+### 🗂️ Create a Resource Group (Good Practice for Organization)
+
+A **resource group** is a container for related Azure resources (databases, storage, web apps, etc.). 📦
+
+Steps (portal):
+
+- 🌐 Sign in to the **Azure Portal**
+- 🗂️ Go to **Resource groups** → **Create**
+- 🏷️ Choose a name (example: `rg-doomsday-5`)
+- 📍 Select a region (example: `East US 2`)
+- 🏷️ Add tags if needed (e.g., `owner=email@domain.com`, `environment=dev`)
+
+---
+
+### 🧑‍⚖️ What Is Azure Access Control (IAM)?
+
+**Access control (IAM)** is where you:
+
+- 👀 **View your access** (confirm you have admin rights at the chosen scope)
+- ➕ **Add role assignments** (grant users/groups permissions)
+- 🧩 Control access with least privilege (give only what’s needed)
+
+---
+
+### ➕ How to Assign Roles to Users (RBAC)
+
+To grant access to a resource group:
+
+- 🗂️ Open the **resource group**
+- 🔐 Go to **Access control (IAM)**
+- ➕ Select **Add** → **Add role assignment**
+- 🎭 Choose a role (common example: **Contributor**)
+- 👤 Select the member(s) (user, group, service principal)
+- ✅ Review + assign
+
+📌 Tip: Prefer the smallest scope that works (resource group is often better than subscription-wide). 🎯
+
+---
+
+### ✅ Benefits of Managing Access Properly
+
+- 🛡️ **Better security**: reduced blast radius
+- 🧠 **Cleaner administration**: clear ownership and responsibilities
+- 🔄 **Flexibility**: quickly adjust access as projects change
+
+---
+
+### 🔎 After Assigning Roles: Quick Verification
+
+- 🔄 Refresh the portal (sometimes a hard refresh helps: `Ctrl + F5`)
+- 👀 Reopen the resource group and confirm the role assignment appears
+- 🧪 Test by creating a simple resource (e.g., a Storage Account) to validate permissions
+
+---
+
+### 🆘 Troubleshooting: The User Email Doesn’t Show Up in “Select members”
+
+If the email you enter doesn’t appear (or Azure says it doesn’t exist), check:
+
+- ✅ The email is correct and the user actually exists in your **tenant directory** (Microsoft Entra ID)
+- 🏢 The user is in the **same organization/tenant** (personal emails like Gmail may not exist in the directory unless invited as guests)
+- 🔎 Try searching by **display name** if they’re in the same tenant and the email isn’t searchable
+
+---
+
+### 📝 Class 17 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│         SUBSCRIPTIONS + ACCESS CONTROL (IAM/RBAC)         │
+├─────────────────────────────────────────────────────────┤
+│  🗂️ RESOURCE GROUP  │  Organize resources by project       │
+│  🔐 IAM / RBAC       │  Control who can do what             │
+│  🎭 ROLES            │  Assign Contributor/Reader/etc.      │
+│  🆘 TROUBLESHOOT     │  Member not found → check tenant     │
 └─────────────────────────────────────────────────────────┘
 ```
 
