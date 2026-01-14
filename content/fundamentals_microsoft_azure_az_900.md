@@ -22,6 +22,7 @@
 - **[Class 16: Scalability + High Availability](#class-16)**
 - **[Class 17: Managing Subscriptions + Access (IAM/RBAC)](#class-17)**
 - **[Class 18: Getting the Most from Access Control (Scopes + Least Privilege)](#class-18)**
+- **[Class 19: Zero Trust for Cloud-Native Security](#class-19)**
 
 ---
 
@@ -1696,6 +1697,113 @@ Azure has a large ecosystem of built-in roles with specific permissions. The por
 │  🎭 ROLES           │  Contributor / Reader / specialized  │
 │  🎯 LEAST PRIVILEGE │  Give only what's necessary          │
 │  🧩 INTEGRATION     │  Example: ACR Pull for image access   │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-19"></a>
+## 🎓 Class 19: Zero Trust for Cloud-Native Application Security
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is the Zero Trust Principle in Cloud-Native Security?
+
+Security is critical when building cloud-native apps—especially as cyberattacks increase. One of the most important ideas is **Zero Trust**: assume nothing is trusted by default and **verify every access**. 🔐
+
+At first, it can feel dramatic (“don’t trust even yourself”), but the goal is practical: small configuration mistakes can open the door to serious incidents. Zero Trust pushes you to **limit access** and keep resources as secure as possible. 🛡️
+
+Recommended reading:
+
+- 📘 [Microsoft Zero Trust guidance center](https://learn.microsoft.com/es-es/security/zero-trust/)
+
+---
+
+### 🧪 Lab Script (Class Commands)
+
+Source folder:
+
+- 🧾 [platzi/AZ-900 `zeroTrust/`](https://github.com/platzi/AZ-900/tree/main/zeroTrust)
+
+Example commands used in class (basic vs hardened storage account):
+
+```bash
+# Create a resource group
+az group create -l eastus2 -n GrupoRecursosSeguros
+
+# Create a basic storage account
+az storage account create -n storageiaas004 -g GrupoRecursosSeguros -l eastus2 --sku Standard_LRS
+
+# Create a more secure storage account (Zero Trust-style defaults)
+az storage account create -n storageiaas005 -g GrupoRecursosSeguros -l eastus2 --sku Standard_LRS \
+  --https-only true \
+  --allow-blob-public-access false \
+  --allow-shared-key-access false \
+  --min-tls-version TLS1_2 \
+  --public-network-access disabled
+```
+
+#### 🔎 What these “secure” flags do
+
+- 🔒 **`--https-only true`**: forces encrypted transport (no HTTP)
+- 🚫 **`--allow-blob-public-access false`**: prevents public/anonymous blob access
+- 🗝️🚫 **`--allow-shared-key-access false`**: blocks shared key auth (push toward identity-based access)
+- 🧊 **`--min-tls-version TLS1_2`**: requires modern TLS
+- 🌐🚫 **`--public-network-access disabled`**: disables public network access (use private networking)
+
+---
+
+### ⚖️ How Do You Secure Cloud Resources Without Slowing Developers Down?
+
+The challenge is balancing **security** with **developer productivity**. Zero Trust helps by making security **default** and **repeatable**, often through automation:
+
+- 🤖 Use scripts/templates to create resource groups and storage accounts consistently
+- 🏷️ Use hard-to-guess naming patterns (avoid predictable names)
+- 🔒 Enforce secure transport (HTTPS)
+- 🚫 Avoid anonymous/container public access
+- 🧑‍🦱 Use identities (managed identities/service principals) instead of sharing keys
+- 🌐 Disable public network access when possible and allow only specific networks/private endpoints
+
+✅ Result: the same resource still works—but with much stronger guardrails.
+
+---
+
+### 👀 How to See the Impact of These Security Settings in the Portal
+
+After applying restrictions, compare a “default” resource vs a “hardened” one:
+
+- 🔐 **Secure transfer required** enabled
+- 🚫 **Anonymous access** disabled
+- 🌐 **Networking restrictions**: “All networks” vs “Selected networks / private access”
+
+This makes it clear which resources are protected by identity + network boundaries. 🧱
+
+---
+
+### 🎯 How to Apply Zero Trust Effectively (Culture + Practice)
+
+Zero Trust is more than settings—it’s a mindset:
+
+- ✅ **Verify explicitly** (every access, every request)
+- 🧾 **Least privilege** (tie-in to Classes 17–18)
+- 🛡️ **Assume breach** (design so one mistake doesn’t compromise everything)
+
+In plain terms:
+
+> Zero Trust is basically “I don’t trust my own shadow.” Even if you’re the admin/dev, everything should be validated—every access, every permission, every resource—so one mistake or attack doesn’t take down the whole system. ✅
+
+---
+
+### 📝 Class 19 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    ZERO TRUST                            │
+├─────────────────────────────────────────────────────────┤
+│  ✅ VERIFY          │  Validate every access              │
+│  🎯 LEAST PRIVILEGE │  Minimum permissions by default     │
+│  🔒 SECURE BY DEFAULT│ HTTPS + identity + private access  │
+│  🤖 AUTOMATE        │  Make security repeatable           │
 └─────────────────────────────────────────────────────────┘
 ```
 
