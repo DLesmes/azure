@@ -24,6 +24,8 @@
 - **[Class 18: Getting the Most from Access Control (Scopes + Least Privilege)](#class-18)**
 - **[Class 19: Zero Trust for Cloud-Native Security](#class-19)**
 - **[Class 20: Cloud Governance + TCO](#class-20)**
+- **[Class 21: Managing Users in Azure (Microsoft Entra + Groups)](#class-21)**
+- **[Class 22: Passwordless Authentication (Microsoft Entra ID)](#class-22)**
 
 ---
 
@@ -1905,6 +1907,159 @@ Example outcome (illustrative): a 3-year comparison might show meaningful saving
 │  🧮 TCO             │  Compare on-prem vs cloud            │
 │  🌍 REGION          │  Pricing varies by geography         │
 │  🧠 DECISIONS       │  Use reports to justify strategy     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-21"></a>
+## 🎓 Class 21: Managing Users in an Azure Subscription (Microsoft Entra)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Manage Users in an Azure Subscription?
+
+In modern cloud environments, effective user management is essential for both **security** and **operational efficiency**. Azure provides strong tooling for identity and access management through **Microsoft Entra** (the modern name for “Azure Active Directory”). 🔐
+
+Product reference:
+
+- 🧾 [Microsoft Entra Domain Services](https://azure.microsoft.com/es-es/products/microsoft-entra-ds)
+
+---
+
+### 👤 How Do I Register and Remove Users?
+
+User lifecycle management is critical:
+
+- ✅ Add users who need access
+- 🚫 Remove users immediately when they no longer need it
+
+In the Azure Portal:
+
+- 🔎 Search for **Microsoft Entra**
+- 👥 Go to **Users** to see all identities
+- 🗑️ Select a user and **Delete** to remove access
+
+> 📌 When you delete a user, their access is removed entirely. If they need access again later, you’ll have to add/invite them again.
+
+---
+
+### 🧩 How Do I Organize Users with Groups?
+
+Groups help you scale administration by assigning access once to a group instead of many individual users. 📦
+
+In Microsoft Entra:
+
+- 👥 Go to **Groups** → **New group**
+- 🏷️ Create groups by department/project (e.g., `finance-devs`, `marketing`)
+- 🧪 Create a temporary/guest group for short-term collaborators so you can remove them in bulk later
+
+---
+
+### 🛡️ How Do I Improve Azure Account Security?
+
+Azure/Microsoft Entra surfaces security recommendations and “secure score”-style signals that help you understand how protected your identity environment is. 📊
+
+What to do:
+
+- 🔎 Review your current score/insights
+- ✅ Follow recommended actions (example: restrict user consent to third-party apps)
+- ⚖️ Aim for balanced settings: strong security without blocking developer productivity
+
+⏳ Note: score updates can take time (up to ~48 hours) after changes.
+
+---
+
+### 📝 Class 21 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                USER MANAGEMENT (ENTRA)                   │
+├─────────────────────────────────────────────────────────┤
+│  👤 USERS          │  Add/remove users quickly            │
+│  🧩 GROUPS         │  Assign access at scale              │
+│  🛡️ SECURITY       │  Follow recommendations              │
+│  ⏳ SCORE UPDATES   │  Changes may take time to reflect    │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-22"></a>
+## 🎓 Class 22: Enabling Passwordless Authentication in Microsoft Entra ID
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Enable Passwordless Authentication in Microsoft Entra ID?
+
+Security is a priority, and Microsoft provides modern identity tools to protect accounts. One of the simplest and most effective upgrades you can enable is **passwordless authentication** using **Microsoft Entra ID**. 🔐📱
+
+---
+
+### 🧭 What Is Microsoft Entra?
+
+**Microsoft Entra** extends the Azure identity experience and centralizes identity + security settings.  
+Think of it as a Zero Trust-friendly identity platform for unified access—so employees/users can securely access apps and resources according to their role, with **least privilege**. ✅
+
+Portal:
+
+- 🌐 `https://microsoftentra.microsoft.com`
+
+---
+
+### 🔑 How Does Passwordless Authentication Work?
+
+Passwordless sign-in reduces dependence on passwords by using the **Microsoft Authenticator** app on your phone:
+
+- 🔔 Sign-in approval notifications
+- 🧬 Biometric verification (fingerprint/face)
+
+This improves both security and usability. ✨
+
+---
+
+### ✅ Steps to Enable Passwordless Authentication
+
+1. 🌐 Open **Microsoft Entra**: `https://microsoftentra.microsoft.com`
+2. 🧭 Find the **passwordless** setup guidance (search “passwordless” in the portal)
+3. 📲 Install **Microsoft Authenticator** (if you don’t already have it)
+4. 🔗 In the Authenticator app:
+   - Add/link your Azure/Microsoft account
+   - Enable **phone sign-in / passwordless**
+5. 🛡️ In the Entra portal:
+   - Go to **Protection** → **Authentication methods**
+   - Enable the **Microsoft Authenticator** policy
+6. 💾 Save changes ✅
+
+---
+
+### 🛡️ Why Passwordless Matters
+
+Passwords are frequently phished or reused. Passwordless sign-in reduces the attack surface by removing password-only reliance, helping prevent identity-based attacks. 🧠🛑
+
+---
+
+### 🧯 Extra Recommendations (Backup Options)
+
+For resilience, consider enabling additional methods (where appropriate), such as:
+
+- 📩 SMS
+- 📞 Voice call
+
+So you’re not blocked if your phone is unavailable. ✅
+
+---
+
+### 📝 Class 22 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│            PASSWORDLESS AUTH (ENTRA ID)                  │
+├─────────────────────────────────────────────────────────┤
+│  📱 AUTHENTICATOR    │  Approve sign-ins on your phone     │
+│  🧬 BIOMETRICS       │  Fingerprint/Face verification      │
+│  🛡️ POLICIES         │  Enable Authenticator method policy │
+│  🧯 BACKUP METHODS    │  SMS/voice as a fallback            │
 └─────────────────────────────────────────────────────────┘
 ```
 
