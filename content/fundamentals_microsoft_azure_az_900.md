@@ -26,6 +26,7 @@
 - **[Class 20: Cloud Governance + TCO](#class-20)**
 - **[Class 21: Managing Users in Azure (Microsoft Entra + Groups)](#class-21)**
 - **[Class 22: Passwordless Authentication (Microsoft Entra ID)](#class-22)**
+- **[Class 23: Non-Human Access with Service Principals (RBAC)](#class-23)**
 
 ---
 
@@ -2060,6 +2061,142 @@ So you’re not blocked if your phone is unavailable. ✅
 │  🧬 BIOMETRICS       │  Fingerprint/Face verification      │
 │  🛡️ POLICIES         │  Enable Authenticator method policy │
 │  🧯 BACKUP METHODS    │  SMS/voice as a fallback            │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-23"></a>
+## 🎓 Class 23: Accessing Azure Resources Without a Human User (Service Principals + RBAC)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Can an App Access Azure Resources Without a Human User?
+
+Many real systems need **applications** (not humans) to access Azure resources—like:
+
+- 🌐 A web app that needs to access a database
+- ☸️ A Kubernetes cluster that needs to pull images from a container registry
+
+To enable this securely, Azure uses **RBAC (Role-Based Access Control)** and application identities such as **service principals**. 🤖🔐
+
+Docs:
+
+- 📘 [What is Azure RBAC?](https://learn.microsoft.com/es-es/azure/role-based-access-control/overview)
+
+Class commands reference:
+
+- 🧾 [GitHub script: `rbac/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/rbac/comandos.sh)
+
+---
+
+### 🧑‍💼 What Is a Service Principal in Azure?
+
+A **service principal** is an identity for an application to access Azure resources “like a user,” but without using personal credentials. ✅  
+This is a safer and more scalable way to automate access.
+
+> 🔐 Important: the credentials you get back can be powerful—store them securely and never commit them to git.
+
+---
+
+### 🏷️ Create a Service Principal with RBAC
+
+General pattern:
+
+```bash
+az ad sp create-for-rbac \
+  --name "your-service-principal-name" \
+  --role "Contributor" \
+  --scopes "/subscriptions/<subscription-id>"
+```
+
+Key fields:
+
+- **`--name`**: unique service principal name
+- **`--role`**: what the identity can do (Contributor/Reader/etc.)
+- **`--scopes`**: where the access applies (subscription, resource group, or resource)
+
+---
+
+### 🧭 RBAC Scopes: Subscription vs Resource Group vs Resource
+
+You can scope access to match least privilege:
+
+- 🧾 **Subscription**: broad access across everything
+- 🗂️ **Resource group**: limited to one project/workload
+- 🧩 **Single resource**: access to one resource only
+
+Examples:
+
+```bash
+# Contributor at Resource Group scope
+az ad sp create-for-rbac \
+  --name "ContribuidoresGrupales" \
+  --role "Contributor" \
+  --scopes "/subscriptions/<subscription-id>/resourceGroups/GrupoRecursosContribuidores"
+
+# Reader at Resource Group scope
+az ad sp create-for-rbac \
+  --name "LectoresGrupales" \
+  --role "Reader" \
+  --scopes "/subscriptions/<subscription-id>/resourceGroups/GrupoRecursosLectores"
+```
+
+---
+
+### 🗂️ Creating Resource Groups for Separation of Duties
+
+```bash
+az group create -l eastus2 -n GrupoRecursosContribuidores
+az group create -l eastus2 -n GrupoRecursosLectores
+```
+
+This keeps environments organized and helps enforce access boundaries. 🧱
+
+---
+
+### 🔑 Sign In with a Service Principal (for Automation)
+
+Azure CLI supports service principal login:
+
+```bash
+az login --service-principal \
+  --username <appId> \
+  --password <clientSecret> \
+  --tenant <tenantId>
+```
+
+> 🛑 Never paste real secrets into documentation or chats. Use secret managers and rotate credentials.
+
+---
+
+### 🧹 Clean Up (Security Best Practice)
+
+Delete service principals you no longer need:
+
+```bash
+az ad sp delete --id <appId>
+```
+
+And delete lab resource groups when done:
+
+```bash
+az group delete -n GrupoRecursosContribuidores
+az group delete -n GrupoRecursosLectores
+```
+
+---
+
+### 📝 Class 23 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              NON-HUMAN ACCESS (RBAC)                     │
+├─────────────────────────────────────────────────────────┤
+│  🤖 SERVICE PRINCIPAL │  App identity for Azure access     │
+│  🎭 ROLES            │  Contributor/Reader/etc.            │
+│  🧭 SCOPES           │  Subscription/RG/Resource           │
+│  🔐 SECRETS          │  Store securely, rotate regularly   │
 └─────────────────────────────────────────────────────────┘
 ```
 
