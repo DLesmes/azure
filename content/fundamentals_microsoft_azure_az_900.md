@@ -23,6 +23,7 @@
 - **[Class 17: Managing Subscriptions + Access (IAM/RBAC)](#class-17)**
 - **[Class 18: Getting the Most from Access Control (Scopes + Least Privilege)](#class-18)**
 - **[Class 19: Zero Trust for Cloud-Native Security](#class-19)**
+- **[Class 20: Cloud Governance + TCO](#class-20)**
 
 ---
 
@@ -1804,6 +1805,106 @@ In plain terms:
 │  🎯 LEAST PRIVILEGE │  Minimum permissions by default     │
 │  🔒 SECURE BY DEFAULT│ HTTPS + identity + private access  │
 │  🤖 AUTOMATE        │  Make security repeatable           │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-20"></a>
+## 🎓 Class 20: Cloud Governance (Principles) + Total Cost of Ownership (TCO)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Cloud Governance?
+
+**Cloud governance** is a framework of rules, policies, and processes that helps you manage and control cloud usage—so you meet business goals while keeping security, efficiency, and cost optimization under control. 🧭🔐💸
+
+In practice, governance is how you prove your cloud solutions are:
+
+- ✅ **Controllable**
+- 💰 **Cost-effective**
+- 🛡️ **Secure**
+- 📊 **Aligned with business outcomes**
+
+---
+
+### 🧠 Why Governance Matters
+
+The software we deploy is the backbone of real businesses. When your systems are the product (think streaming platforms, marketplaces, etc.), governance ensures the cloud stays sustainable—technically and financially. 📈
+
+---
+
+### 🧮 How to Evaluate Total Cost of Ownership (TCO)
+
+Having a clear TCO strategy helps you compare:
+
+- 🏢 Running workloads on-premises (physical servers)
+- ☁️ Running workloads in Azure
+
+Tool:
+
+- 🧾 [Azure TCO Calculator](https://azure.microsoft.com/es-es/pricing/tco/calculator/)
+
+---
+
+### 🧪 Example TCO Exercise (Two Work Environments)
+
+Use the calculator to model two scenarios and compare the results.
+
+#### 🧱 Environment A (Windows licensing cost)
+
+- 🖥️ Server OS: Windows
+- 📜 License: Datacenter
+- 🧩 Virtualization: Hyper-V
+- 🧮 Virtual machines: 50
+- 🧠 Cores: 8
+- 🧠 RAM: 16 GB
+
+#### 🐧 Environment B (Linux, no OS licensing cost)
+
+- 🖥️ Server OS: Linux
+- 🧩 Virtualization: Hyper-V
+- 🧮 Virtual machines: 50
+- 🧠 Cores: 8
+- 🧠 RAM: 16 GB
+
+#### 💾 Storage assumptions (both environments)
+
+- 💽 Local disk capacity: 60 TB
+- 🗄️ Backups: +120 TB
+
+---
+
+### 💡 Interpreting Results + Cost Optimization Levers
+
+Your results will vary, but the key insight is learning *what drives cost* and how you can optimize:
+
+- 🧮 **Compute**: often the biggest cost driver
+- 🌍 **Region**: geography can materially change pricing
+- ⏳ **Time period**: short (2–3 years) vs longer horizons can change the “best choice”
+
+Example outcome (illustrative): a 3-year comparison might show meaningful savings (e.g., tens of thousands of USD) by moving to cloud vs staying fully on-prem. 💸
+
+---
+
+### 🗺️ What to Consider When Planning a Cloud Strategy
+
+- 🎯 If you need short-term flexibility (campaigns, launches, growth spikes), cloud agility can be a strong advantage
+- 🧾 For stable, long-lived workloads, you should still compare longer-term economics
+- 📄 Use the calculator output to produce reports (e.g., export/download) to support decision-making
+
+---
+
+### 📝 Class 20 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│               CLOUD GOVERNANCE + TCO                     │
+├─────────────────────────────────────────────────────────┤
+│  🧭 GOVERNANCE      │  Policies + control + alignment      │
+│  🧮 TCO             │  Compare on-prem vs cloud            │
+│  🌍 REGION          │  Pricing varies by geography         │
+│  🧠 DECISIONS       │  Use reports to justify strategy     │
 └─────────────────────────────────────────────────────────┘
 ```
 
