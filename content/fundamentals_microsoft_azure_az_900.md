@@ -29,6 +29,7 @@
 - **[Class 23: Non-Human Access with Service Principals (RBAC)](#class-23)**
 - **[Class 24: Compute in Azure (VMs, Container Apps, Functions)](#class-24)**
 - **[Class 25: VM Scale Sets (VMSS) + Autoscaling](#class-25)**
+- **[Class 26: DNS Zones in Azure (Create + Manage)](#class-26)**
 
 ---
 
@@ -2420,6 +2421,111 @@ VMSS + gateways can generate costs. Always clean up lab resources when done. �
 │  📈 AUTOSCALE       │  Scale out/in based on demand        │
 │  🚦 APP GATEWAY     │  Route/balance inbound traffic       │
 │  💸 COST CONTROL    │  Clean up labs after testing         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-26"></a>
+## 🎓 Class 26: DNS Zones in Azure (Creation + Management)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Manage DNS Zones in Azure?
+
+Networking in the cloud has moved from physical routers/switches to **software-defined networking**. Azure lets you create and manage core networking building blocks—like VNets, subnets, and DNS—directly from the portal or the CLI. 🌐⚙️
+
+This class focuses on **Azure DNS Zones**: creating a DNS zone and managing DNS records (like A records) so services can be reached by friendly names instead of raw IPs. 🧭
+
+Class commands source:
+
+- 🧾 [GitHub script: `redes/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/redes/comandos.sh)
+
+---
+
+### 🌐 What Is a Virtual Network (VNet) and Why Does It Matter?
+
+A **VNet** is a software-defined network boundary in Azure. It allows:
+
+- 🧱 **Subnets** to segment traffic
+- 🌍 **Public IPs** for inbound access (when needed)
+- 🚦 Gateways/load balancers to manage inbound traffic patterns
+
+VNets are foundational for security and flexibility in cloud deployments. ✅
+
+---
+
+### 🧩 How Do I Configure a DNS Zone in Azure?
+
+#### 1) Create a resource group (networking container)
+
+```bash
+az group create --name grupoRecursosRedes --location "East US"
+```
+
+#### 2) Create a DNS Zone
+
+```bash
+az network dns zone create -g grupoRecursosRedes -n platzi.xyz
+```
+
+#### 3) Create an A record (example: `www` → IP)
+
+```bash
+az network dns record-set a add-record \
+  -g grupoRecursosRedes \
+  -z platzi.xyz \
+  -n www \
+  -a <IP_DESTINATION>
+```
+
+---
+
+### 🔎 How Do I List and Inspect Records?
+
+List record sets in the zone:
+
+```bash
+az network dns record-set list -g grupoRecursosRedes -z platzi.xyz
+```
+
+Show the zone’s name servers (NS):
+
+```bash
+az network dns record-set ns show --resource-group grupoRecursosRedes --zone-name platzi.xyz --name @
+```
+
+---
+
+### 🧪 How to Validate with `nslookup`
+
+You can validate DNS resolution with `nslookup`:
+
+```bash
+nslookup www.platzi.xyz <DNS_SERVER>
+```
+
+This helps confirm whether the domain and DNS server are configured correctly and where the name resolves. ✅
+
+---
+
+### 🧠 Note on “Internal” vs “Public” DNS
+
+Azure can manage **public DNS zones** (internet-facing) and also **private DNS zones** (internal name resolution for Azure VNets).  
+Private DNS is often used for internal apps so you don’t rely on external DNS providers for internal-only names. 🔒
+
+---
+
+### 📝 Class 26 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   AZURE DNS ZONES                        │
+├─────────────────────────────────────────────────────────┤
+│  🗂️ RESOURCE GROUP  │  Organize networking resources       │
+│  🌐 DNS ZONE         │  Create domain zone                 │
+│  📌 A RECORD         │  Map name → IPv4                    │
+│  🔎 VERIFY           │  List records + nslookup            │
 └─────────────────────────────────────────────────────────┘
 ```
 
