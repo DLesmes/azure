@@ -30,6 +30,7 @@
 - **[Class 24: Compute in Azure (VMs, Container Apps, Functions)](#class-24)**
 - **[Class 25: VM Scale Sets (VMSS) + Autoscaling](#class-25)**
 - **[Class 26: DNS Zones in Azure (Create + Manage)](#class-26)**
+- **[Class 27: Public VM Networking (Public IP + NSG + Web Server)](#class-27)**
 
 ---
 
@@ -2526,6 +2527,200 @@ Private DNS is often used for internal apps so you don’t rely on external DNS 
 │  🌐 DNS ZONE         │  Create domain zone                 │
 │  📌 A RECORD         │  Map name → IPv4                    │
 │  🔎 VERIFY           │  List records + nslookup            │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+*📅 Course: Microsoft Azure Fundamentals (AZ-900)*
+<a id="class-27"></a>
+## 🎓 Class 27: Public VM Networking in Azure (Public IP + NSG + Web Server)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Configure Networking to Access VMs in Azure?
+
+By default, many Azure VMs are effectively “internal-first” for safety. To access a VM from the internet (for admin or demo purposes), you need to explicitly configure:
+
+- 🌐 A **Virtual Network (VNet)** + **Subnet**
+- 🌍 A **Public IP**
+- 🛡️ A **Network Security Group (NSG)** with inbound rules
+- 🧩 A VM NIC/subnet association so the NSG actually applies
+
+Class commands source:
+
+- 🧾 [GitHub script: `vmPublica/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/vmPublica/comandos.sh)
+
+---
+
+### 🧠 Why Can’t I Connect to My VM?
+
+Because Azure networking is designed to be secure-by-default:
+
+- 🚫 No inbound traffic unless you allow it
+- 🛡️ NSGs act like firewalls at the subnet/NIC level
+
+So you must explicitly open only the ports you need. ✅
+
+---
+
+### 🪟 Windows VM Example (RDP + IIS Web Server)
+
+#### 1) Create RG + VNet + Subnet
+
+```bash
+az group create --name grupoRecursosPublicos --location "eastus2"
+
+az network vnet create \
+  --resource-group grupoRecursosPublicos \
+  --name redVirtual \
+  --address-prefix 10.10.0.0/16 \
+  --subnet-name WebSubnet \
+  --subnet-prefix 10.10.0.0/24
+```
+
+#### 2) Public IP + NSG + inbound rules
+
+```bash
+az network public-ip create --resource-group grupoRecursosPublicos --name publicIP
+
+az network nsg create --resource-group grupoRecursosPublicos --name nsg
+
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsg --name allowRDP  --protocol tcp --priority 1000 --destination-port-range 3389
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsg --name allowHTTP --protocol tcp --priority 1001 --destination-port-range 80
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsg --name allowHTTPS --protocol tcp --priority 1002 --destination-port-range 443
+```
+
+#### 3) Associate NSG to the subnet
+
+```bash
+az network vnet subnet update \
+  --vnet-name redVirtual \
+  --name WebSubnet \
+  --resource-group grupoRecursosPublicos \
+  --network-security-group nsg
+```
+
+#### 4) Create Windows VM + open ports
+
+```bash
+az vm create \
+  --resource-group grupoRecursosPublicos \
+  --name webServerVirt \
+  --image Win2019Datacenter \
+  --admin-username azureadmin \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD" \
+  --vnet-name redVirtual \
+  --subnet WebSubnet \
+  --public-ip-address publicIP \
+  --nsg nsg
+
+az vm open-port -g grupoRecursosPublicos -n webServerVirt --port 80,443,3389 --priority 100
+```
+
+#### 5) Install IIS (web server) via VM extension
+
+**Bash-friendly JSON**:
+
+```bash
+az vm extension set \
+  --resource-group grupoRecursosPublicos \
+  --vm-name webServerVirt \
+  --name customScriptExtension \
+  --publisher Microsoft.Compute \
+  --settings '{"commandToExecute":"powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools"}'
+```
+
+**Windows CMD quoting version** (escaping JSON):
+
+```bash
+az vm extension set --resource-group grupoRecursosPublicos --vm-name webServerVirt --name customScriptExtension --publisher Microsoft.Compute --settings "{""commandToExecute"": ""powershell -ExecutionPolicy Unrestricted -Command Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools""}"
+```
+
+Quoting reference:
+
+- 📘 [Azure CLI quoting: JSON strings](https://learn.microsoft.com/cli/azure/use-azure-cli-successfully-quoting#json-strings)
+
+✅ Verify: open the VM’s public IP in a browser (HTTP/HTTPS) and confirm IIS responds.
+
+---
+
+### 🐧 Linux VM Example (SSH + Apache)
+
+#### 1) Create a new subnet for Linux (same VNet)
+
+```bash
+az network vnet subnet create \
+  --resource-group grupoRecursosPublicos \
+  --vnet-name redVirtual \
+  --name LinuxSubnet \
+  --address-prefixes 10.10.1.0/24
+```
+
+#### 2) Public IP + NSG + inbound rules (SSH/HTTP/HTTPS)
+
+```bash
+az network public-ip create --resource-group grupoRecursosPublicos --name publicIPLinux
+
+az network nsg create --resource-group grupoRecursosPublicos --name nsgLinux
+
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsgLinux --name allowSSH  --protocol tcp --priority 1000 --destination-port-range 22
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsgLinux --name allowHTTP --protocol tcp --priority 1001 --destination-port-range 80
+az network nsg rule create --resource-group grupoRecursosPublicos --nsg-name nsgLinux --name allowHTTPS --protocol tcp --priority 1002 --destination-port-range 443
+```
+
+#### 3) Associate NSG to Linux subnet
+
+```bash
+az network vnet subnet update \
+  --vnet-name redVirtual \
+  --name LinuxSubnet \
+  --resource-group grupoRecursosPublicos \
+  --network-security-group nsgLinux
+```
+
+#### 4) Create Ubuntu VM + open ports
+
+```bash
+az vm create \
+  --name ubuntuServerVirt \
+  --resource-group grupoRecursosPublicos \
+  --image Ubuntu2204 \
+  --admin-username azureuser \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD" \
+  --vnet-name redVirtual \
+  --subnet LinuxSubnet \
+  --public-ip-address publicIPLinux \
+  --nsg nsgLinux
+
+az vm open-port -g grupoRecursosPublicos -n ubuntuServerVirt --port 22,80,443 --priority 100
+```
+
+#### 5) Install Apache via VM extension
+
+```bash
+az vm extension set \
+  --resource-group grupoRecursosPublicos \
+  --vm-name ubuntuServerVirt \
+  --name customScript \
+  --publisher Microsoft.Azure.Extensions \
+  --settings '{"commandToExecute":"sudo apt-get update && sudo apt-get install -y apache2 && sudo systemctl enable --now apache2"}'
+```
+
+✅ Verify: open the Linux VM public IP in your browser and confirm the Apache default page.
+
+---
+
+### 📝 Class 27 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│               PUBLIC VM NETWORKING                       │
+├─────────────────────────────────────────────────────────┤
+│  🌐 VNET/SUBNET     │  Private network boundary           │
+│  🌍 PUBLIC IP       │  Internet entry point              │
+│  🛡️ NSG RULES       │  Allow only needed ports           │
+│  🧩 EXTENSIONS      │  Install IIS/Apache automatically   │
 └─────────────────────────────────────────────────────────┘
 ```
 
