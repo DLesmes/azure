@@ -27,6 +27,7 @@
 - **[Class 21: Managing Users in Azure (Microsoft Entra + Groups)](#class-21)**
 - **[Class 22: Passwordless Authentication (Microsoft Entra ID)](#class-22)**
 - **[Class 23: Non-Human Access with Service Principals (RBAC)](#class-23)**
+- **[Class 24: Compute in Azure (VMs, Container Apps, Functions)](#class-24)**
 
 ---
 
@@ -2197,6 +2198,119 @@ az group delete -n GrupoRecursosLectores
 │  🎭 ROLES            │  Contributor/Reader/etc.            │
 │  🧭 SCOPES           │  Subscription/RG/Resource           │
 │  🔐 SECRETS          │  Store securely, rotate regularly   │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-24"></a>
+## 🎓 Class 24: Compute in Azure (VMs, Container Apps, Function Apps)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Role Do Compute Resources Play in the Cloud?
+
+Cloud compute is the engine behind modern workloads. It powers everything from classic virtual machines to containers and serverless code. For developers and businesses, compute is where you run apps, process requests, and deliver results. ⚡☁️
+
+Class commands source:
+
+- 🧾 [platzi/AZ-900 `computo/`](https://github.com/platzi/AZ-900/tree/main/computo)
+
+---
+
+### 🗂️ How to Create a Resource Group + a Virtual Machine (VM)
+
+A **resource group** is a logical container for related Azure resources. 📦  
+A **virtual machine** is one of the most common compute resources because it emulates a full computer/server. 🖥️
+
+```bash
+az group create --name "my-resource-group" --location "eastus2"
+```
+
+```bash
+az vm create \
+  --resource-group "my-resource-group" \
+  --name "my-vm" \
+  --image "Ubuntu2204" \
+  --admin-username "azureuser" \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD"
+```
+
+> 🔐 Tip: For real production workloads, prefer SSH keys over passwords.
+
+---
+
+### 📦 What Are Azure Container Apps (and When Should You Use Them)?
+
+Not every container project needs Kubernetes. Kubernetes can be powerful but also complex and costly. **Azure Container Apps** are a great option when you want:
+
+- ✅ Container deployment without managing Kubernetes
+- 📈 Built-in scaling patterns
+- 🌐 Easy external ingress
+
+#### 1) Create a Container Apps environment
+
+```bash
+az containerapp env create \
+  --name "my-ca-env" \
+  --resource-group "my-resource-group" \
+  --location "eastus2"
+```
+
+#### 2) Deploy a container image (Docker)
+
+```bash
+az containerapp create \
+  --name "my-containerapp" \
+  --resource-group "my-resource-group" \
+  --image "my-docker-image:latest" \
+  --environment "my-ca-env" \
+  --ingress external \
+  --target-port 80
+```
+
+This creates a public endpoint so users can access your app. 🚀
+
+---
+
+### 🧠 What Are Function Apps (Serverless) and How Do They Work?
+
+**Azure Function Apps** let you run code without provisioning servers (serverless). They’re great for:
+
+- 🔁 Automation and integrations
+- ⚙️ Background tasks
+- 🌐 Event-driven workloads
+
+Example (runtime shown for illustration):
+
+```bash
+az functionapp create \
+  --resource-group "my-resource-group" \
+  --consumption-plan-location "eastus2" \
+  --name "my-function-app-name" \
+  --storage-account "mystorageacctname" \
+  --runtime "dotnet"
+```
+
+---
+
+### 📊 What Is Log Analytics (and Why Does It Matter Here)?
+
+**Log Analytics** is an Azure workspace used to collect, store, and analyze telemetry and logs from your resources. 📈  
+It’s required for some services—such as certain **Container Apps environments**—because it enables logging/monitoring and diagnostics. ✅
+
+---
+
+### 📝 Class 24 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                  AZURE COMPUTE                           │
+├─────────────────────────────────────────────────────────┤
+│  🖥️ VM             │  Full server in the cloud             │
+│  📦 CONTAINER APPS  │  Containers without Kubernetes mgmt   │
+│  ⚡ FUNCTIONS        │  Serverless code execution            │
+│  📊 LOG ANALYTICS   │  Logs/telemetry workspace             │
 └─────────────────────────────────────────────────────────┘
 ```
 
