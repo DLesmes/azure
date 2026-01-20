@@ -28,6 +28,7 @@
 - **[Class 22: Passwordless Authentication (Microsoft Entra ID)](#class-22)**
 - **[Class 23: Non-Human Access with Service Principals (RBAC)](#class-23)**
 - **[Class 24: Compute in Azure (VMs, Container Apps, Functions)](#class-24)**
+- **[Class 25: VM Scale Sets (VMSS) + Autoscaling](#class-25)**
 
 ---
 
@@ -2311,6 +2312,114 @@ It’s required for some services—such as certain **Container Apps environment
 │  📦 CONTAINER APPS  │  Containers without Kubernetes mgmt   │
 │  ⚡ FUNCTIONS        │  Serverless code execution            │
 │  📊 LOG ANALYTICS   │  Logs/telemetry workspace             │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-25"></a>
+## 🎓 Class 25: Why Use Virtual Machine Scale Sets (VMSS) in Azure?
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary
+
+When you need **multiple virtual machines**, creating them one by one quickly becomes painful (repetitive commands, inconsistent configs, manual scaling).  
+**Azure Virtual Machine Scale Sets (VMSS)** solve this by managing **a group of VMs** as a single orchestrated unit, with built-in scaling and operational consistency. 🧩⚙️
+
+Class command/source folder:
+
+- 🧾 [platzi/AZ-900 `vms/`](https://github.com/platzi/AZ-900/tree/main/vms)
+
+---
+
+### 🛠️ How Do You Configure a VM Scale Set? (High-level Flow)
+
+Typical steps you’ll see in a VMSS deployment:
+
+1. 🗂️ Create a **resource group**
+2. 🌐 Create a **virtual network (VNet)** and **subnet**
+3. 🌍 Create a **public IP** (entry point)
+4. 🚦 Add an **Application Gateway** (optional but common) to route/balance incoming traffic
+5. 🖥️ Create the **VMSS** with an initial instance count
+6. 📈 Configure **autoscale rules** (scale out / scale in)
+
+---
+
+### 🌐 What Is an Application Gateway (and Why Use It)?
+
+**Application Gateway** is a Layer 7 load balancer / reverse proxy that helps manage inbound web traffic. It can route requests to your VM instances and provide more control over how traffic is handled. 🚦
+
+---
+
+### 📈 Autoscaling Rules (Why They Matter)
+
+Autoscaling adjusts the number of VM instances to match demand:
+
+- 🔥 **Scale out**: add instances when CPU > **70%**
+- 🧊 **Scale in**: remove instances when CPU < **30%**
+
+This helps you handle peaks while optimizing cost when demand is low. 💸✅
+
+---
+
+### 🧪 Example Commands (Skeleton)
+
+> Note: the repo scripts include variables (randomized names, etc.). Below is a simplified, safe outline.
+
+```bash
+# Resource group
+az group create --name <rg-name> --location eastus
+
+# VNet (and subnet name in script)
+az network vnet create --resource-group <rg-name> --name <vnet-name>
+az network vnet subnet create --resource-group <rg-name> --vnet-name <vnet-name> --name <subnet-name>
+
+# Public IP
+az network public-ip create --resource-group <rg-name> --name <public-ip-name>
+
+# VMSS (initial instances)
+az vmss create --resource-group <rg-name> --name <vmss-name> --instance-count 2 --image UbuntuLTS
+```
+
+---
+
+### 🧩 Deploy Everything at Once (Scripted)
+
+In the class repo, the whole architecture can be deployed via a bash script (example):
+
+```bash
+sh deploy.sh
+```
+
+After deployment, verify in the Azure Portal:
+
+- 🗂️ Resource group resources
+- 🌐 VNet/subnets
+- 🌍 Public IPs
+- 🖥️ VM scale set instances
+- 🚦 Gateway (if configured)
+
+Then open the public IP in your browser to validate end-to-end. 🌍✅
+
+---
+
+### 🧹 Cost Reminder
+
+VMSS + gateways can generate costs. Always clean up lab resources when done. 🧾
+
+---
+
+### 📝 Class 25 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 VM SCALE SETS (VMSS)                     │
+├─────────────────────────────────────────────────────────┤
+│  🧩 ORCHESTRATION   │  Manage many VMs as one unit         │
+│  📈 AUTOSCALE       │  Scale out/in based on demand        │
+│  🚦 APP GATEWAY     │  Route/balance inbound traffic       │
+│  💸 COST CONTROL    │  Clean up labs after testing         │
 └─────────────────────────────────────────────────────────┘
 ```
 
