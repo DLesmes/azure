@@ -37,6 +37,7 @@
 - **[Class 31: Azure Bastion (Secure VM Access Without Public IPs)](#class-31)**
 - **[Class 32: Microsoft Defender for Cloud](#class-32)**
 - **[Class 33: Azure Policy (Custom Security Policies)](#class-33)**
+- **[Class 34: Azure Cloud Shell (Bash/PowerShell in the Portal)](#class-34)**
 
 ---
 
@@ -3305,6 +3306,77 @@ Good governance is collaborative: secure by default, but designed for real devel
 │  📊 COMPLIANCE      │  Measure + track non-compliant items │
 │  🧹 REMEDIATE       │  Fix drift (manual/auto)            │
 │  🤝 CULTURE         │  Security + productivity balance     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-34"></a>
+## 🎓 Class 34: Azure Cloud Shell (Bash/PowerShell in the Azure Portal)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Azure Cloud Shell and How Do You Use It?
+
+**Azure Cloud Shell** is a built-in terminal inside the Azure Portal that lets you manage Azure resources without installing anything locally. You can run commands, manage resources, and work with scripts directly in the browser—using **Bash** or **PowerShell**. 💻☁️
+
+---
+
+### ▶️ How to Start Azure Cloud Shell
+
+In the Azure Portal, click the **terminal icon** in the top bar (near notifications). The portal will split the screen and open Cloud Shell.
+
+If it’s your first time:
+
+- 🧙‍♂️ You’ll go through a setup wizard
+- 💾 Azure will create (or mount) a **Storage Account** so your files persist between sessions
+
+This persistence is key—otherwise every session would start “empty.” ✅
+
+---
+
+### 🧰 Bash vs PowerShell (Which Should You Choose?)
+
+During setup, you’ll pick a shell:
+
+- 🐚 **Bash**: great if you’re used to Linux tooling and scripts
+- 🪟 **PowerShell**: great if you’re used to Windows-style automation
+
+You can switch later, but starting with the one you’re most comfortable with speeds up learning. ⚡
+
+---
+
+### ✅ Why Cloud Shell Is Useful
+
+- ⚡ **Instant access**: already authenticated inside the portal (no extra login)
+- 📄 **Docs + terminal side-by-side**: copy/paste examples while you read tutorials
+- 💾 **Persistent storage**: your files remain available between sessions
+
+Example command:
+
+```bash
+az group list
+```
+
+---
+
+### ⚠️ Limitations to Keep in Mind
+
+- 📏 The workspace can feel limited for long/complex projects
+- 🧑‍💻 For bigger scripts and development, a local environment can be more comfortable (editor, tooling, repo workflows)
+
+---
+
+### 📝 Class 34 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE CLOUD SHELL                     │
+├─────────────────────────────────────────────────────────┤
+│  ⚡ INSTANT CLI      │  No local install needed            │
+│  🐚 BASH / 🪟 PS     │  Choose your preferred shell         │
+│  💾 PERSISTENCE      │  Storage keeps files between sessions│
+│  📄 DOCS + CLI       │  Learn faster with side-by-side view │
 └─────────────────────────────────────────────────────────┘
 ```
 
