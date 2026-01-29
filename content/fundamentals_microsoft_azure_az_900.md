@@ -33,6 +33,7 @@
 - **[Class 27: Public VM Networking (Public IP + NSG + Web Server)](#class-27)**
 - **[Class 28: Azure Storage Basics (Accounts, Keys, Containers, Blobs)](#class-28)**
 - **[Class 29: Azure Storage Access Tiers (Hot/Cool/Cold/Archive)](#class-29)**
+- **[Class 30: Private Storage + VNets (Network Rules)](#class-30)**
 
 ---
 
@@ -2918,6 +2919,145 @@ Ask yourself:
 │  🧊 COOL           │  Infrequent access (30d min)          │
 │  ❄️ COLD           │  Rare access (90d min)                │
 │  🗄️ ARCHIVE         │  Long-term (hours latency, 180d min)  │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-30"></a>
+## 🎓 Class 30: Consolidation Lab — VNets + Private Azure Storage (Network Rules)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Combine VNets + Cloud Storage Securely?
+
+Now that you’ve created **Storage Accounts** and **Virtual Networks**, it’s time to level up: make a Storage Account **private by default** and allow access only from:
+
+- ✅ A specific **subnet** inside your VNet (recommended)
+- ✅ (Optionally) specific **public IPs** (useful for admin/testing)
+
+This is a very common real-world pattern for reducing exposure and improving security. 🔐🌐
+
+---
+
+### 🗂️ Step 1: Create a Resource Group + Storage Account (Deny by default)
+
+> ⚠️ Note: Access tiers (Hot/Cool/Cold) apply to **Blob** data and are commonly used with **standard** accounts. Premium SKUs don’t always support the same “access tier” behavior.  
+For a learning lab, use a standard SKU with an access tier.
+
+```bash
+az group create --name <rg-name> --location eastus2
+
+az storage account create \
+  --name <uniqueStorageAccountName> \
+  --resource-group <rg-name> \
+  --location eastus2 \
+  --sku Standard_LRS \
+  --access-tier Hot \
+  --default-action Deny
+```
+
+✅ `--default-action Deny` means “block everything unless explicitly allowed.”
+
+---
+
+### 🌐 Step 2: Create a VNet + Subnet (and enable Service Endpoints)
+
+Create VNet + subnet:
+
+```bash
+az network vnet create \
+  --name <vnet-name> \
+  --resource-group <rg-name> \
+  --address-prefix 10.10.0.0/16 \
+  --subnet-name platzi-subnet \
+  --subnet-prefix 10.10.0.0/24
+```
+
+Enable the **Storage** service endpoint on the subnet:
+
+```bash
+az network vnet subnet update \
+  --resource-group <rg-name> \
+  --vnet-name <vnet-name> \
+  --name platzi-subnet \
+  --service-endpoints Microsoft.Storage
+```
+
+---
+
+### 🧩 Step 3: Allow the Subnet to Access the Storage Account
+
+```bash
+az storage account network-rule add \
+  --resource-group <rg-name> \
+  --account-name <uniqueStorageAccountName> \
+  --vnet-name <vnet-name> \
+  --subnet platzi-subnet
+```
+
+✅ At this point, access from that subnet is allowed; everything else stays blocked.
+
+---
+
+### 🖥️ Step 4: Create a VM Inside That Subnet
+
+```bash
+az vm create \
+  --resource-group <rg-name> \
+  --name <vm-name> \
+  --vnet-name <vnet-name> \
+  --subnet platzi-subnet \
+  --image UbuntuLTS \
+  --admin-username azureuser \
+  --admin-password "REPLACE_WITH_A_STRONG_PASSWORD"
+```
+
+---
+
+### 🌍 Step 5 (Optional): Allow a Specific Public IP
+
+If you need to allow access from *one* known public IP (for testing/admin), you can add it as a network rule.
+
+Get the VM’s public IP:
+
+```bash
+IP_PUBLICA=$(az vm list-ip-addresses \
+  --resource-group <rg-name> \
+  --name <vm-name> \
+  --query "[].virtualMachine.network.publicIpAddresses[*].{ip:ipAddress}" \
+  --output tsv)
+```
+
+Allow that IP:
+
+```bash
+az storage account network-rule add \
+  --resource-group <rg-name> \
+  --account-name <uniqueStorageAccountName> \
+  --ip-address "$IP_PUBLICA"
+```
+
+---
+
+### ✅ How to Verify It’s Working
+
+- 🧪 Try accessing the storage account **from outside** the allowed subnet/IP → you should get access errors (expected).
+- ✅ Access from inside the VNet/subnet should work (depending on your auth method: keys vs RBAC).
+- 🔁 Experiment by removing IP/subnet rules and observe access changes.
+
+---
+
+### 📝 Class 30 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│          PRIVATE STORAGE + VNET ACCESS CONTROL           │
+├─────────────────────────────────────────────────────────┤
+│  🚫 DEFAULT DENY     │  Block by default                  │
+│  🌐 SUBNET ALLOW     │  Allow only the VNet subnet        │
+│  🌍 IP ALLOW (OPT)   │  Add a specific public IP if needed │
+│  🧪 TEST + ITERATE   │  Remove rules to see impact         │
 └─────────────────────────────────────────────────────────┘
 ```
 
