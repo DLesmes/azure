@@ -31,6 +31,8 @@
 - **[Class 25: VM Scale Sets (VMSS) + Autoscaling](#class-25)**
 - **[Class 26: DNS Zones in Azure (Create + Manage)](#class-26)**
 - **[Class 27: Public VM Networking (Public IP + NSG + Web Server)](#class-27)**
+- **[Class 28: Azure Storage Basics (Accounts, Keys, Containers, Blobs)](#class-28)**
+- **[Class 29: Azure Storage Access Tiers (Hot/Cool/Cold/Archive)](#class-29)**
 
 ---
 
@@ -2532,7 +2534,6 @@ Private DNS is often used for internal apps so you don’t rely on external DNS 
 
 ---
 
-*📅 Course: Microsoft Azure Fundamentals (AZ-900)*
 <a id="class-27"></a>
 ## 🎓 Class 27: Public VM Networking in Azure (Public IP + NSG + Web Server)
 
@@ -2721,6 +2722,202 @@ az vm extension set \
 │  🌍 PUBLIC IP       │  Internet entry point              │
 │  🛡️ NSG RULES       │  Allow only needed ports           │
 │  🧩 EXTENSIONS      │  Install IIS/Apache automatically   │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-28"></a>
+## 🎓 Class 28: Azure Storage Basics (Accounts, Keys, Containers, Blobs)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: Why Is It Essential to Understand Cloud Storage?
+
+Cloud storage is a core part of modern IT infrastructure. It helps you store and manage data reliably, integrate with apps, and improve operational security when used correctly. 💾☁️  
+Understanding **Storage Accounts**, **containers**, and **blobs** is a foundational Azure skill.
+
+Class commands source:
+
+- 🧾 [GitHub script: `almacenamiento/comandos.sh`](https://github.com/platzi/AZ-900/blob/main/almacenamiento/comandos.sh)
+
+---
+
+### 🏗️ How to Create a Storage Account in Azure (CLI)
+
+1) Create a resource group:
+
+```bash
+az group create --name grupoAlmacenamiento --location "eastus2"
+```
+
+2) Create a storage account (low-cost defaults for labs):
+
+```bash
+az storage account create \
+  --name <unique_storage_account_name> \
+  --resource-group grupoAlmacenamiento \
+  --location eastus2 \
+  --sku Standard_LRS
+```
+
+📌 Note: storage account names must be globally unique.
+
+---
+
+### 🔑 How to Access Storage Account Keys (and Why to Be Careful)
+
+You can list keys like this:
+
+```bash
+az storage account keys list --account-name <storage_account_name> --resource-group grupoAlmacenamiento
+```
+
+And you can extract a specific value with `--query`:
+
+```bash
+az storage account keys list \
+  --account-name <storage_account_name> \
+  --resource-group grupoAlmacenamiento \
+  --query "[0].value" \
+  --output tsv
+```
+
+⚠️ Keys are powerful secrets. Don’t paste them into repos, chat logs, or documentation. Prefer identity-based access (RBAC) in real environments. 🔐
+
+---
+
+### 📦 Create Containers (Blob Storage)
+
+If you *must* use an account key for a lab, you can store it temporarily in an environment variable:
+
+```bash
+AZURE_STORAGE_KEY=$(az storage account keys list \
+  --account-name <storage_account_name> \
+  --resource-group grupoAlmacenamiento \
+  --query "[0].value" \
+  --output tsv)
+```
+
+Then create containers:
+
+```bash
+az storage container create --name amin   --account-name <storage_account_name> --account-key "$AZURE_STORAGE_KEY"
+az storage container create --name oscar  --account-name <storage_account_name> --account-key "$AZURE_STORAGE_KEY"
+az storage container create --name felipe --account-name <storage_account_name> --account-key "$AZURE_STORAGE_KEY"
+```
+
+---
+
+### ⬆️ Upload a File (Blob Upload)
+
+```bash
+az storage blob upload \
+  --container-name amin \
+  --file ./comandos.sh \
+  --name comandos.sh \
+  --account-name <storage_account_name>
+```
+
+---
+
+### 🧭 Managing Storage Without the Azure Portal
+
+If you prefer a GUI, **Azure Storage Explorer** is a great tool to browse and manage storage accounts, containers, and blobs without living inside the portal. 🧰
+
+---
+
+### 📝 Class 28 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 AZURE STORAGE BASICS                     │
+├─────────────────────────────────────────────────────────┤
+│  💾 STORAGE ACCOUNT  │  The main storage namespace         │
+│  🔑 KEYS             │  Powerful secrets (handle carefully)│
+│  📦 CONTAINERS        │  Blob containers                   │
+│  ⬆️ BLOBS             │  Upload/download files             │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-29"></a>
+## 🎓 Class 29: Azure Storage Access Tiers (Hot, Cool, Cold, Archive)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Storage “Types” (Access Tiers) Exist in Azure?
+
+Azure Blob Storage offers **access tiers** so you can optimize cost based on how often data is accessed and how long you need to keep it. 📦💸  
+The more “infrequent” the tier, the cheaper storage usually becomes—but access/retrieval costs and latency can increase. ⚖️
+
+Official documentation:
+
+- 📘 [Hot, Cool, Cold, and Archive access tiers (Azure Blob Storage)](https://learn.microsoft.com/es-es/azure/storage/blobs/access-tiers-overview#summary-of-access-tier-options)
+
+---
+
+### 🔥 Hot tier
+
+- ✅ Best for data accessed/modified frequently
+- 💰 Higher storage cost, lower access cost
+
+---
+
+### 🧊 Cool tier
+
+- ✅ Best for data accessed infrequently but still needs to be available online
+- 💸 Lower storage cost, higher access cost
+- ⏳ Minimum retention: **30 days** (early deletion charges may apply)
+
+---
+
+### 🧊❄️ Cold tier
+
+- ✅ Best for data accessed very rarely but still online-accessible
+- 💸 Even lower storage cost, higher access cost
+- ⏳ Minimum retention: **90 days** (early deletion charges may apply)
+
+---
+
+### 🗄️ Archive tier
+
+- ✅ Best for long-term retention with flexible retrieval latency (hours)
+- 💸 Lowest storage cost, highest retrieval cost/latency
+- ⏳ Minimum retention: **180 days** (early deletion charges may apply)
+
+---
+
+### 🎯 How to Choose the Right Tier
+
+Ask yourself:
+
+- 🔁 **Access frequency**: how often will I read/write this data?
+- ⏳ **Retention time**: how long will I keep it?
+- 💸 **Budget profile**: do I want cheaper storage or cheaper access?
+
+📌 Tip: picking the right tier up front helps avoid unnecessary “tier change” charges later.
+
+---
+
+### ⚙️ How to Configure Tiers (Account vs Blob)
+
+- 🏦 **Storage account default access tier**: typically used to set a default for blobs that don’t have a tier explicitly set (commonly Hot/Cool).
+- 📦 **Blob tier**: can be set per blob to Hot/Cool/Cold/Archive depending on your needs.
+
+---
+
+### 📝 Class 29 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│              AZURE BLOB ACCESS TIERS                     │
+├─────────────────────────────────────────────────────────┤
+│  🔥 HOT            │  Frequent access                     │
+│  🧊 COOL           │  Infrequent access (30d min)          │
+│  ❄️ COLD           │  Rare access (90d min)                │
+│  🗄️ ARCHIVE         │  Long-term (hours latency, 180d min)  │
 └─────────────────────────────────────────────────────────┘
 ```
 
