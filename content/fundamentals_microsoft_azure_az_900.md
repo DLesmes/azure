@@ -34,6 +34,7 @@
 - **[Class 28: Azure Storage Basics (Accounts, Keys, Containers, Blobs)](#class-28)**
 - **[Class 29: Azure Storage Access Tiers (Hot/Cool/Cold/Archive)](#class-29)**
 - **[Class 30: Private Storage + VNets (Network Rules)](#class-30)**
+- **[Class 31: Azure Bastion (Secure VM Access Without Public IPs)](#class-31)**
 
 ---
 
@@ -2938,6 +2939,10 @@ Now that you’ve created **Storage Accounts** and **Virtual Networks**, it’s 
 
 This is a very common real-world pattern for reducing exposure and improving security. 🔐🌐
 
+Class commands source:
+
+- 🧾 [GitHub script: `almacenamientoPrivado/comandos.sh`](https://github.com/DLesmes/AZ-900/blob/main/almacenamientoPrivado/comandos.sh)
+
 ---
 
 ### 🗂️ Step 1: Create a Resource Group + Storage Account (Deny by default)
@@ -3058,6 +3063,100 @@ az storage account network-rule add \
 │  🌐 SUBNET ALLOW     │  Allow only the VNet subnet        │
 │  🌍 IP ALLOW (OPT)   │  Add a specific public IP if needed │
 │  🧪 TEST + ITERATE   │  Remove rules to see impact         │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-31"></a>
+## 🎓 Class 31: Azure Bastion (Secure VM Access Without Public IPs)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Azure Bastion and How Do You Use It?
+
+**Azure Bastion** is a managed service that lets you connect to VMs in a private network **without** exposing them to the internet with public IPs. It acts like a secure “jump” into your VNet, enabling **RDP/SSH from your browser** with minimal client-side networking configuration. 🔐🖥️
+
+Core benefits:
+
+- 🚫 **No public IP on the VM**
+- 🌐 **RDP/SSH in the browser**
+- 🛡️ Avoid opening management ports (22/3389) to the internet
+- ✅ Cleaner security posture for admin access
+
+---
+
+### 🧾 Class Resources
+
+- 🧾 **Command script**: [bastion/comandos.sh](https://github.com/DLesmes/AZ-900/blob/21c80b4c8baa4d906a961749bd7bec86dbb62979/bastion/comandos.sh)
+- 📦 **Sample repo (Point-to-Site + VM in VNet)**: [Despliegue-PointToSite](https://github.com/aminespinoza10/Despliegue-PointToSite)
+
+> 🔐 Note: the script includes credentials—don’t commit real passwords, and prefer SSH keys or secret managers in real projects.
+
+---
+
+### 🛠️ Deployment Checklist (What You Need)
+
+To deploy Azure Bastion you typically need:
+
+- 🗂️ A resource group
+- 🌐 A VNet with:
+  - 🧩 Your workload subnet (e.g., `subnet-1`)
+  - 🧩 A dedicated subnet named **`AzureBastionSubnet`** (required)
+- 🌍 A **Standard** public IP (used by Bastion, not by the VM)
+- 🧱 A VM **without** a public IP
+
+---
+
+### 🧪 CLI Outline (Safe, Minimal)
+
+```bash
+# Resource group
+az group create --name grupoBastion --location eastus2
+
+# VNet + workload subnet
+az network vnet create --resource-group grupoBastion --location eastus2 --name vnet-1 \
+  --address-prefixes 10.0.0.0/16 --subnet-name subnet-1 --subnet-prefixes 10.0.0.0/24
+
+# Required subnet for Bastion (must be named AzureBastionSubnet)
+az network vnet subnet create --resource-group grupoBastion --name AzureBastionSubnet --vnet-name vnet-1 \
+  --address-prefixes 10.0.1.0/26
+
+# Public IP for Bastion (Standard)
+az network public-ip create --resource-group grupoBastion --name public-ip --sku Standard
+
+# Create Bastion
+az network bastion create --resource-group grupoBastion --name bastion \
+  --public-ip-address public-ip --vnet-name vnet-1 --location eastus2
+
+# Create VM WITHOUT public IP
+az vm create --resource-group grupoBastion --name vm-1 --image Win2022Datacenter \
+  --public-ip-address "" --vnet-name vnet-1 --subnet subnet-1 \
+  --admin-username azureuser --admin-password "REPLACE_WITH_A_STRONG_PASSWORD"
+```
+
+Then connect via the Azure Portal → Bastion → select the VM → connect using RDP/SSH in the browser. 🌐✅
+
+---
+
+### 💸 Best Practices
+
+- 🧾 **Cost awareness**: Bastion can add cost—delete it when not needed for labs
+- 🔐 **Security**: keep VMs private, minimize inbound rules, use least privilege
+- 🧹 **Cleanup**: remove the resource group after testing to avoid surprise bills
+
+---
+
+### 📝 Class 31 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE BASTION                         │
+├─────────────────────────────────────────────────────────┤
+│  🚫 NO PUBLIC VM IP  │  VM stays private                  │
+│  🌐 BROWSER ACCESS   │  RDP/SSH without VPN complexity     │
+│  🧩 REQUIRED SUBNET  │  AzureBastionSubnet                │
+│  💸 COST CONTROL     │  Delete when done                  │
 └─────────────────────────────────────────────────────────┘
 ```
 
