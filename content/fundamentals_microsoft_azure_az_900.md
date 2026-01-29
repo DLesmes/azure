@@ -36,6 +36,7 @@
 - **[Class 30: Private Storage + VNets (Network Rules)](#class-30)**
 - **[Class 31: Azure Bastion (Secure VM Access Without Public IPs)](#class-31)**
 - **[Class 32: Microsoft Defender for Cloud](#class-32)**
+- **[Class 33: Azure Policy (Custom Security Policies)](#class-33)**
 
 ---
 
@@ -3234,6 +3235,76 @@ Security works best when it’s built in early. Integrating Defender insights in
 │  🛡️ PROTECTION      │  Protect workloads across clouds      │
 │  🧾 DIAGNOSTICS      │  Enable logs/metrics for visibility   │
 │  🔁 DEVOPS          │  Shift-left security into pipelines    │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-33"></a>
+## 🎓 Class 33: Azure Policy (Custom Security Policies + Compliance)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Customize Security Policies with Azure Policy?
+
+Microsoft Defender for Cloud provides strong security recommendations, but organizations often need **custom rules** that match their internal standards and culture. **Azure Policy** lets you define and enforce those rules at scale—then measure compliance continuously. 🧭🔐
+
+Official documentation:
+
+- 📘 [What is Azure Policy?](https://learn.microsoft.com/es-es/azure/governance/policy/overview)
+
+---
+
+### 🧠 What Is Azure Policy and Why Does It Matter?
+
+Azure Policy helps you:
+
+- ✅ Enforce organizational standards (security, cost, tagging, regions)
+- 📊 Monitor compliance continuously with a central compliance view
+- 🧹 Remediate non-compliant resources (manual or automatic depending on policy/effect)
+
+Example: requiring VMs to send diagnostic logs to a Log Analytics workspace so you can audit and detect issues faster. 📈
+
+---
+
+### 🛠️ How to Set Up a Custom Policy (High-level Steps)
+
+1. 🎯 **Select scope**
+   - Apply at **subscription** level for consistency, or at a **resource group** for a specific project.
+2. 🧩 **Define exclusions**
+   - Exclude specific resource groups/resources only when there’s a justified operational reason.
+3. 📚 **Choose/define the policy**
+   - Browse built-ins or create custom definitions.
+   - Be mindful of preview policies that may change.
+4. 🧾 **Assign the policy**
+   - Name the assignment clearly and ensure compliance evaluation is enabled.
+5. ✅ **Review + create**
+   - Once created, Azure starts evaluating resources for compliance.
+
+---
+
+### 🤝 Culture Impact: Security Without Blocking Developers
+
+Policy should protect resources **without killing velocity**:
+
+- ⚖️ Balance “deny everything” policies with practical workflows
+- 🗣️ Keep a feedback loop with the dev team
+- 🔄 Iterate on policies as requirements evolve
+
+Good governance is collaborative: secure by default, but designed for real development. ✅
+
+---
+
+### 📝 Class 33 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    AZURE POLICY                          │
+├─────────────────────────────────────────────────────────┤
+│  🎯 ENFORCE         │  Standards across scopes            │
+│  📊 COMPLIANCE      │  Measure + track non-compliant items │
+│  🧹 REMEDIATE       │  Fix drift (manual/auto)            │
+│  🤝 CULTURE         │  Security + productivity balance     │
 └─────────────────────────────────────────────────────────┘
 ```
 
