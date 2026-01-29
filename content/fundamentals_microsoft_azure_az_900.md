@@ -35,6 +35,7 @@
 - **[Class 29: Azure Storage Access Tiers (Hot/Cool/Cold/Archive)](#class-29)**
 - **[Class 30: Private Storage + VNets (Network Rules)](#class-30)**
 - **[Class 31: Azure Bastion (Secure VM Access Without Public IPs)](#class-31)**
+- **[Class 32: Microsoft Defender for Cloud](#class-32)**
 
 ---
 
@@ -3157,6 +3158,82 @@ Then connect via the Azure Portal → Bastion → select the VM → connect usin
 │  🌐 BROWSER ACCESS   │  RDP/SSH without VPN complexity     │
 │  🧩 REQUIRED SUBNET  │  AzureBastionSubnet                │
 │  💸 COST CONTROL     │  Delete when done                  │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-32"></a>
+## 🎓 Class 32: Microsoft Defender for Cloud (Cloud Security Posture + Protection)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Microsoft Defender and Why Should You Use It?
+
+Cloud security is a top priority, and **Microsoft Defender for Cloud** helps you continuously improve and protect your cloud environment. It’s not just for Azure—it can also extend to **multi-cloud** scenarios (like AWS and Google Cloud) so you can centralize visibility and security posture management. 🛡️☁️
+
+Official documentation:
+
+- 📘 [What is Microsoft Defender for Cloud?](https://learn.microsoft.com/es-es/azure/defender-for-cloud/defender-for-cloud-introduction)
+
+---
+
+### 🔎 How to Access Microsoft Defender for Cloud in Azure
+
+In the Azure Portal:
+
+- 🔍 Search for **“Microsoft Defender for Cloud”**
+- 📊 You’ll see a security overview for your Azure subscriptions
+- 🌐 You can also configure coverage for other cloud providers (where supported) to get a more unified view
+
+---
+
+### ✅ What Are Security Recommendations?
+
+Defender for Cloud provides **recommendations** to help reduce risk and improve your configuration posture:
+
+- 🚨 **Risk-based recommendations**: prioritize these first (they point to higher exposure)
+- 🧩 **Configuration guidance**: helps enforce best practices (e.g., storage accounts with correct network rules)
+- 🔄 **Continuous monitoring**: keeps assessing resources over time
+
+---
+
+### 🤖 How to Optimize Diagnostics for AI Services (Example)
+
+For modern workloads (including AI services), Defender recommendations often involve ensuring **diagnostic logs and metrics** are captured.
+
+Typical steps:
+
+- 🧠 Locate your **Azure AI Services** resource
+- 🧾 Open **Diagnostic settings**
+- ✅ Enable relevant categories of logs + metrics
+- 💾 Send logs to a storage account / Log Analytics workspace
+- 🗓️ Configure retention policies where appropriate
+
+This improves traceability, compliance, and incident response readiness. 📈✅
+
+---
+
+### 🔁 Why Integrate Defender for Cloud with DevOps?
+
+Security works best when it’s built in early. Integrating Defender insights into **Azure DevOps** or **GitHub Actions** can help you:
+
+- ✅ Validate deployments against security best practices
+- 🤖 Automate checks so issues are caught sooner
+- 🧩 Align infrastructure and code changes with your org’s security posture goals
+
+---
+
+### 📝 Class 32 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│               MICROSOFT DEFENDER FOR CLOUD               │
+├─────────────────────────────────────────────────────────┤
+│  📊 POSTURE         │  Recommendations + risk prioritization│
+│  🛡️ PROTECTION      │  Protect workloads across clouds      │
+│  🧾 DIAGNOSTICS      │  Enable logs/metrics for visibility   │
+│  🔁 DEVOPS          │  Shift-left security into pipelines    │
 └─────────────────────────────────────────────────────────┘
 ```
 
