@@ -41,6 +41,7 @@
 - **[Class 35: Bicep (Simpler IaC than ARM)](#class-35)**
 - **[Class 36: Azure Service Health (Monitor Incidents + Maintenance)](#class-36)**
 - **[Class 37: Azure Portal Satellite Portals (AI, Data, Speech, Entra)](#class-37)**
+- **[Class 39: Serverless in Azure (Azure Functions + Consumption Plan)](#class-39)**
 
 ---
 
@@ -3633,6 +3634,110 @@ This ensures the portal loads the right context and features for your environmen
 │  🛰️ SPECIALIZATION │  Separate portals for focused work    │
 │  ⚡ EFFICIENCY     │  Faster workflows than the main portal │
 │  🧩 PREREQS        │  Often require a subscription/resource │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-39"></a>
+## 🎓 Class 39: Serverless in Azure (Azure Functions + Consumption Plan)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: What Is Serverless and How Does It Work in Azure?
+
+Serverless doesn’t mean “no servers”. It means **you don’t manage them**.  
+Azure runs your code on managed infrastructure so you focus on the app logic, while Azure handles most of the operational work. ☁️⚙️
+
+---
+
+### 🧠 How Do We Define “Serverless”?
+
+Think of it like “wireless”: cables still exist, but they’re not *your* concern.
+
+In serverless:
+
+- ✅ You **deploy code**, not servers
+- ✅ You delegate infrastructure management to Azure
+- ✅ You typically pay based on **usage/executions** rather than “always-on” capacity
+
+---
+
+### 🧰 How To Implement a Serverless Solution in Azure (High-Level)
+
+In Azure, a common entry point to serverless is **Azure Functions**. The typical setup uses:
+
+- 🗄️ A **Storage Account** (required by Function Apps)
+- ⚡ A **Function App** (your serverless host)
+- 📍 A **Consumption plan** location (serverless scaling + billing model)
+
+---
+
+### 🧪 Lab: Create the Basics with Azure CLI
+
+> ⚠️ Use globally unique names where required (storage accounts, function app names). Avoid committing secrets/keys.
+
+#### 1) Create a resource group
+
+```bash
+az group create \
+  --name <rg-serverless> \
+  --location <region>
+```
+
+#### 2) Create the Storage Account (required)
+
+```bash
+az storage account create \
+  --name <uniqueStorageAccountName> \
+  --resource-group <rg-serverless> \
+  --location <region> \
+  --sku <skuType>
+```
+
+#### 3) Create the Function App (serverless host)
+
+```bash
+az functionapp create \
+  --resource-group <rg-serverless> \
+  --consumption-plan-location <region> \
+  --name <uniqueFunctionAppName> \
+  --storage-account <uniqueStorageAccountName> \
+  --runtime dotnet
+```
+
+✅ You can choose the runtime that best fits your team: **dotnet**, **Java**, **Node.js**, or **Python**.
+
+---
+
+### 🤝 What Do You Manage vs What Does Azure Manage?
+
+| You manage | Azure manages |
+|---|---|
+| 🧩 Your code + triggers | 🖥️ Servers, OS patching, underlying infra |
+| ⚙️ Config for your app (settings, bindings) | 📈 Automatic scaling up/down |
+| 🔐 Access & security choices | 🧯 Platform-level availability & maintenance |
+
+---
+
+### 💸 Why Serverless Is Useful
+
+- 📈 **Autoscale** without manual intervention
+- 💰 **Cost efficiency**: pay for what you use (great for bursty workloads)
+- 🚀 **Faster delivery**: less time managing infrastructure
+
+---
+
+### 📝 Class 39 Summary
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                      SERVERLESS (AZURE)                  │
+├──────────────────────────────────────────────────────────┤
+│  🧠 MEANING        │  No server management (not “no servers”)│
+│  ⚡ FUNCTIONS       │  Deploy code, run on-demand           │
+│  📈 AUTOSCALE       │  Scale automatically with demand      │
+│  💰 COST MODEL      │  Pay mainly by usage                  │
 └──────────────────────────────────────────────────────────┘
 ```
 
