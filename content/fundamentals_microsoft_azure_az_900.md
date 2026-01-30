@@ -38,6 +38,7 @@
 - **[Class 32: Microsoft Defender for Cloud](#class-32)**
 - **[Class 33: Azure Policy (Custom Security Policies)](#class-33)**
 - **[Class 34: Azure Cloud Shell (Bash/PowerShell in the Portal)](#class-34)**
+- **[Class 35: Bicep (Simpler IaC than ARM)](#class-35)**
 
 ---
 
@@ -3377,6 +3378,104 @@ az group list
 │  🐚 BASH / 🪟 PS     │  Choose your preferred shell         │
 │  💾 PERSISTENCE      │  Storage keeps files between sessions│
 │  📄 DOCS + CLI       │  Learn faster with side-by-side view │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-35"></a>
+## 🎓 Class 35: Deploying Azure Resources with Bicep (Simpler IaC than ARM)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Can Bicep Simplify Resource Deployment in Azure?
+
+Infrastructure deployment is a must-have skill in cloud. **Bicep** is Microsoft’s modern “Infrastructure as Code” language for Azure—designed to be **more readable and maintainable** than raw ARM JSON templates. 🧱✨
+
+Official documentation:
+
+- 📘 [Azure Resource Manager templates (ARM templates)](https://learn.microsoft.com/es-es/azure/templates/)
+
+---
+
+### 🧠 What Is Bicep (and Why Choose It Over ARM JSON)?
+
+- ✅ **Easier to read**: cleaner syntax than ARM JSON
+- 🎯 **Azure-native**: built specifically for Azure Resource Manager deployments
+- 🧩 **Flexible scopes**: deploy at resource group or subscription scope
+- 🔁 **Repeatable deployments**: helps avoid “clickops” and reduces mistakes
+
+---
+
+### 🧰 How to Install and Start Using Bicep in VS Code
+
+In **Visual Studio Code**:
+
+- 🧩 Install the **Bicep** extension (recommended for formatting + IntelliSense)
+- 📁 Create a folder for your IaC
+- 📄 Create a file named `main.bicep`
+
+---
+
+### 🧪 Practical Example: Storage Account in `main.bicep`
+
+```bicep
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
+  name: 'bicepstorage123'
+  location: 'eastus'
+  kind: 'StorageV2'
+  sku: {
+    name: 'Standard_LRS'
+  }
+}
+```
+
+📌 Note: storage account names must be globally unique—use your own naming pattern.
+
+---
+
+### 🚀 Deploy with Azure CLI
+
+1) Create a resource group:
+
+```bash
+az group create --name permiteque --location eastus
+```
+
+2) Deploy the Bicep template:
+
+```bash
+az deployment group create --resource-group permiteque --template-file main.bicep
+```
+
+---
+
+### ⭐ Why Bicep Beats “Pure CLI Scripting” for Many Deployments
+
+With Bicep (and tools like Terraform), you define desired state in files. That gives you:
+
+- 🧾 A clear deployment record you can keep in Git
+- 🧠 Fewer manual errors vs repeating ad-hoc commands
+- 🔄 Easier reuse across environments (dev/prod) once you add parameters
+
+---
+
+### 🔜 What’s Next?
+
+After deploying your first resource, the next step is to **parameterize** the template (names, locations, SKUs) so it works across environments consistently. ✅
+
+---
+
+### 📝 Class 35 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                         BICEP                            │
+├─────────────────────────────────────────────────────────┤
+│  🧱 IaC             │  Define infra as code               │
+│  ✨ READABLE         │  Cleaner than ARM JSON             │
+│  🚀 DEPLOY           │  `az deployment group create`      │
+│  🔁 REPEATABLE       │  Safer, versionable deployments     │
 └─────────────────────────────────────────────────────────┘
 ```
 
