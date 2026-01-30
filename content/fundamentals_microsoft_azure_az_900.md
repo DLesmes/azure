@@ -3554,7 +3554,7 @@ Service Health provides a broad view across regions/geographies (Americas, Europ
 
 ---
 
-### 📝 Class 37 Summary
+### 📝 Class 36 Summary
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -3565,6 +3565,75 @@ Service Health provides a broad view across regions/geographies (Americas, Europ
 │  🔔 ALERTS          │  Notify the right people early      │
 │  🌍 RESILIENCE      │  Multi-region designs reduce downtime│
 └─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-37"></a>
+## 🎓 Class 37: Azure Portal Satellite Portals (AI, Data, Speech, Entra)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Has the Azure Portal Evolved?
+
+Azure has evolved massively since its early days (mostly VMs, storage, and a few cloud services). Today it’s a full ecosystem—so the **main Azure Portal** is powerful, but some workflows are easier in **specialized “satellite portals”** focused on a specific domain. 🧭
+
+Useful portals (resources):
+
+- 🗣️ **Speech Studio (real-time speech to text)**: [Speech to text tool](https://speech.microsoft.com/portal/speechtotexttool)
+- 🤖 **Azure AI Foundry**: [Azure AI Foundry](https://ai.azure.com/)
+- 🧠 **Azure Machine Learning Studio**: [Machine Learning Studio](https://ml.azure.com/)
+- 🏭 **Azure Data Factory**: [Azure Data Factory](https://adf.azure.com/en/datafactories)
+
+---
+
+### 🛰️ What Are Azure “Satellite Portals”?
+
+Satellite portals are mini-sites/portals that complement the main Azure Portal by offering:
+
+- 🎯 A UI optimized for a specific specialty (AI, data engineering, identity, etc.)
+- 🧰 More focused tools (less “noise” than the full portal)
+- 🚀 Faster workflows for advanced scenarios
+
+---
+
+### 🧩 Examples: When To Use Each Portal
+
+| Portal | Best for | Why it helps |
+|---|---|---|
+| 🗣️ Speech Studio | Voice AI experiments and demos | Quickly test speech-to-text features without building a full app |
+| 🤖 Azure AI Foundry | Managing Azure AI resources | Centralized experience for AI services and related tooling |
+| 🧠 ML Studio | Building your own ML models | End-to-end ML workflows: training, tracking, deployment, and management |
+| 🏭 Azure Data Factory | Data integration pipelines | Build/monitor pipelines with a UI instead of long scripts |
+
+---
+
+> ✅ **Key idea**: The main Azure Portal is your “control center”, but satellite portals can make specialized work **faster and more comfortable**.
+
+---
+
+### 🔐 Prerequisites: Why Some Portals Ask for Subscription/Resources
+
+Many satellite portals expect you to already have:
+
+- 📦 A subscription selected
+- 🧩 The relevant resource created (e.g., Data Factory instance, ML workspace, AI resource)
+
+This ensures the portal loads the right context and features for your environment. 🧷
+
+---
+
+### 📝 Class 37 Summary
+
+```
+┌──────────────────────────────────────────────────────────┐
+│                 AZURE SATELLITE PORTALS                   │
+├──────────────────────────────────────────────────────────┤
+│  🧭 EVOLUTION     │  Azure grew into a full ecosystem      │
+│  🛰️ SPECIALIZATION │  Separate portals for focused work    │
+│  ⚡ EFFICIENCY     │  Faster workflows than the main portal │
+│  🧩 PREREQS        │  Often require a subscription/resource │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ---
