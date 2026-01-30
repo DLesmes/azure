@@ -39,6 +39,8 @@
 - **[Class 33: Azure Policy (Custom Security Policies)](#class-33)**
 - **[Class 34: Azure Cloud Shell (Bash/PowerShell in the Portal)](#class-34)**
 - **[Class 35: Bicep (Simpler IaC than ARM)](#class-35)**
+- **[Class 36: Azure Service Health (Monitor Incidents + Maintenance)](#class-36)**
+- **[Class 37: Azure Portal Satellite Portals (AI, Data, Speech, Entra)](#class-37)**
 
 ---
 
@@ -3395,6 +3397,7 @@ Infrastructure deployment is a must-have skill in cloud. **Bicep** is Microsoft�
 Official documentation:
 
 - 📘 [Azure Resource Manager templates (ARM templates)](https://learn.microsoft.com/es-es/azure/templates/)
+- 📘 [Bicep documentation](https://learn.microsoft.com/es-es/azure/azure-resource-manager/bicep/)
 
 ---
 
@@ -3476,6 +3479,91 @@ After deploying your first resource, the next step is to **parameterize** the te
 │  ✨ READABLE         │  Cleaner than ARM JSON             │
 │  🚀 DEPLOY           │  `az deployment group create`      │
 │  🔁 REPEATABLE       │  Safer, versionable deployments     │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-36"></a>
+## 🎓 Class 36: Azure Service Health (Monitor Service Incidents + Maintenance)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary: How Do I Monitor the Health of Azure Services?
+
+Even robust cloud platforms can experience incidents. As an Azure admin, you need a reliable way to know whether an outage is **your app** or an **Azure service/region** issue.  
+**Azure Service Health** helps you monitor incidents and planned maintenance and react quickly. 🛡️⏱️
+
+Official documentation:
+
+- 📘 [Azure Service Health](https://azure.microsoft.com/es-es/get-started/azure-portal/service-health#:~:text=Es%20un%20lugar%20de%20consulta,que%20tienen%20un%20amplio%20impacto.)
+- 📘 [Azure status page (widespread incidents)](https://azure.status.microsoft/en-us/status)
+
+> 💡 **Quick tip**: Use **Azure Status** for big, platform-wide incidents, and **Service Health** for a *personalized view* of issues/maintenance that may impact your specific subscriptions, services, and regions.
+
+---
+
+### ❤️ What Is Azure Service Health?
+
+Azure Service Health is your personalized view of:
+
+- 🚨 **Active service incidents** affecting your subscriptions/regions
+- 🛠️ **Planned maintenance** that may impact your resources
+- 📣 **Health advisories** (important notices)
+
+It helps you mitigate downtime and communicate impact to stakeholders. ✅
+
+---
+
+### 🔎 How to Access and Understand Service Health in the Portal
+
+1. 🔍 In the Azure Portal search bar, type **Service Health**
+2. ❤️ Open the result (heart icon)
+3. 🗺️ Review the map/status:
+   - ✅ A “clean” view usually means no issues affecting your selected scope
+   - 🚨 If a region/service is impacted, you’ll see details and recommended actions (for example, fail over to another region)
+
+---
+
+### 🔔 How to Configure Service Health Alerts
+
+Alerts are key for staying proactive:
+
+- 📌 Create alerts scoped to specific **subscriptions, services, and regions**
+- 📧 Receive notifications (email and other channels depending on configuration)
+- 🛠️ Track planned maintenance so teams can prepare for potential disruption
+
+---
+
+### 🧯 What To Do During a Datacenter/Region Incident
+
+You can’t prevent a Microsoft datacenter incident—but you can reduce impact by design:
+
+- 🌍 Use **multi-region** or **replicated** architectures
+- 🔁 Keep failover plans ready (and test them)
+
+Then when an outage happens, your system can keep running from another region. ✅
+
+---
+
+### 🌍 How to Check Availability Across Regions
+
+Service Health provides a broad view across regions/geographies (Americas, Europe, Africa, etc.) to help you understand overall platform state and where you might shift workloads if needed. 🧭
+
+> 🕒 Updates are frequent, so you get near real-time information for planning and response.
+
+---
+
+### 📝 Class 37 Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 AZURE SERVICE HEALTH                     │
+├─────────────────────────────────────────────────────────┤
+│  🚨 INCIDENTS       │  Know when Azure is impacted        │
+│  🛠️ MAINTENANCE     │  Plan for scheduled changes         │
+│  🔔 ALERTS          │  Notify the right people early      │
+│  🌍 RESILIENCE      │  Multi-region designs reduce downtime│
 └─────────────────────────────────────────────────────────┘
 ```
 
