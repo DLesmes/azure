@@ -351,6 +351,13 @@ Just like macOS, installation on Ubuntu/Debian is straightforward:
 - 🧩 **Run the install command/script** from the official guide
 - ⚙️ The script will download and configure Azure CLI automatically
 
+Install command (copy/paste):
+
+```bash
+# Installation
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+```
+
 ---
 
 ### ✅ How to Verify the Installation Worked
