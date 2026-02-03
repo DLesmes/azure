@@ -2713,6 +2713,18 @@ az vm create \
 az vm open-port -g grupoRecursosPublicos -n ubuntuServerVirt --port 22,80,443 --priority 100
 ```
 
+#### 4.1) Connect via SSH
+
+```bash
+ssh <username>@<vm-public-ip>
+```
+
+Example:
+
+```bash
+ssh azureuser@<public-ip>
+```
+
 #### 5) Install Apache via VM extension
 
 ```bash
