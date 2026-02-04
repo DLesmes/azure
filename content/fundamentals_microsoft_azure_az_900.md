@@ -42,6 +42,7 @@
 - **[Class 36: Azure Service Health (Monitor Incidents + Maintenance)](#class-36)**
 - **[Class 37: Azure Portal Satellite Portals (AI, Data, Speech, Entra)](#class-37)**
 - **[Class 39: Serverless in Azure (Azure Functions + Consumption Plan)](#class-39)**
+- **[Class 40: High Availability Environment (Load Balancer + Availability Set)](#class-40)**
 
 ---
 
@@ -3757,6 +3758,145 @@ az functionapp create \
 │  ⚡ FUNCTIONS       │  Deploy code, run on-demand           │
 │  📈 AUTOSCALE       │  Scale automatically with demand      │
 │  💰 COST MODEL      │  Pay mainly by usage                  │
+└──────────────────────────────────────────────────────────┘
+```
+
+---
+
+<a id="class-40"></a>
+## 🎓 Class 40: Create a High Availability Environment (Load Balancer + Availability Set)
+
+⬅️ [Back to Table of Contents](#toc)
+
+### 🧾 Summary
+
+High availability (HA) is about keeping your app reachable even when a VM fails. A classic Azure approach is:
+
+- ⚖️ **Azure Load Balancer** to distribute traffic
+- 🧩 **Availability Set** to spread VMs across fault/update domains
+- 🛡️ **NSG rules** to allow only required inbound traffic
+
+Below is a consolidated CLI script (cleaned up to use one consistent resource group name). ✅
+
+---
+
+### 🧪 Script: Build an HA Lab Environment (3 VMs)
+
+> 📌 Note: This script uses one resource group: `myResourceGroupLoadBalancer`.  
+> Also, it uses `--generate-ssh-keys` (recommended) and a cloud-init file for automatic bootstrapping:
+>
+> - ✅ Repo file: [`content/cloud-init/cloud-init.txt`](cloud-init/cloud-init.txt)
+> - Or copy it locally as `cloud-init.txt` before running the script.
+
+```bash
+# 0) Resource group (use English names to avoid accent/encoding issues)
+RG="myResourceGroupLoadBalancer"
+LOC="westus"
+
+az group create --name "$RG" --location "$LOC"
+
+# 1) Public IP (for the Load Balancer frontend)
+az network public-ip create --resource-group "$RG" --name myPublicIP --sku Standard
+
+# 2) Load Balancer (frontend + backend pool)
+az network lb create \
+  --resource-group "$RG" \
+  --name myLoadBalancer \
+  --frontend-ip-name myFrontEndPool \
+  --backend-pool-name myBackEndPool \
+  --public-ip-address myPublicIP
+
+# 3) Health probe (checks backend health)
+az network lb probe create \
+  --resource-group "$RG" \
+  --lb-name myLoadBalancer \
+  --name myHealthProbe \
+  --protocol tcp \
+  --port 80
+
+# 4) Load Balancer rule (HTTP 80)
+az network lb rule create \
+  --resource-group "$RG" \
+  --lb-name myLoadBalancer \
+  --name myLoadBalancerRule \
+  --protocol tcp \
+  --frontend-port 80 \
+  --backend-port 80 \
+  --frontend-ip-name myFrontEndPool \
+  --backend-pool-name myBackEndPool \
+  --probe-name myHealthProbe
+
+# 5) VNet + subnet
+az network vnet create --resource-group "$RG" --name myVnet --subnet-name mySubnet
+
+# 6) NSG + rule to allow HTTP
+az network nsg create --resource-group "$RG" --name myNetworkSecurityGroup
+
+az network nsg rule create \
+  --resource-group "$RG" \
+  --nsg-name myNetworkSecurityGroup \
+  --name allowHTTP \
+  --priority 1001 \
+  --protocol tcp \
+  --destination-port-range 80
+
+# 7) Create 3 NICs, attach to LB backend pool
+for i in $(seq 1 3); do
+  az network nic create \
+    --resource-group "$RG" \
+    --name myNic$i \
+    --vnet-name myVnet \
+    --subnet mySubnet \
+    --network-security-group myNetworkSecurityGroup \
+    --lb-name myLoadBalancer \
+    --lb-address-pools myBackEndPool
+done
+
+# 8) Availability set
+az vm availability-set create --resource-group "$RG" --name myAvailabilitySet
+
+# 9) Create 3 VMs (Ubuntu) in the availability set
+for i in $(seq 1 3); do
+  az vm create \
+    --resource-group "$RG" \
+    --name myVM$i \
+    --availability-set myAvailabilitySet \
+    --nics myNic$i \
+    --image UbuntuLTS \
+    --admin-username azureuser \
+    --generate-ssh-keys \
+    --custom-data cloud-init/cloud-init.txt \
+    --no-wait
+done
+
+# 10) Get the public IP of the Load Balancer
+az network public-ip show \
+  --resource-group "$RG" \
+  --name myPublicIP \
+  --query ipAddress \
+  --output tsv
+```
+
+---
+
+### ✅ Verification
+
+- 🌍 Open the **Load Balancer public IP** in a browser (`http://<ip>`) once the VMs finish provisioning.
+- 📈 If you used the provided cloud-init file, you should see responses served by the backend pool.
+- ⏳ Give it a few minutes—VM provisioning and extensions can take time.
+
+---
+
+### 📝 Class 40 Summary
+
+```
+┌──────────────────────────────────────────────────────────┐
+│               HIGH AVAILABILITY (BASIC)                  │
+├──────────────────────────────────────────────────────────┤
+│  ⚖️ LOAD BALANCER    │  Distribute traffic to backends    │
+│  🧩 AVAILABILITY SET │  Spread VMs across domains         │
+│  🛡️ NSG              │  Allow only required ports          │
+│  🧪 SCRIPTED          │  Repeatable environment creation   │
 └──────────────────────────────────────────────────────────┘
 ```
 

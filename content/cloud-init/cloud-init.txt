@@ -1,0 +1,74 @@
+#cloud-config
+package_update: true
+package_upgrade: true
+
+packages:
+  - nginx
+  - nodejs
+  - npm
+
+bootcmd:
+  - mkdir -p /home/azureuser/myapp
+  - chown -R azureuser:azureuser /home/azureuser/myapp
+
+write_files:
+  - path: /etc/nginx/sites-available/default
+    owner: root:root
+    permissions: "0644"
+    content: |
+      server {
+        listen 80;
+
+        location / {
+          proxy_pass http://127.0.0.1:3000;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection keep-alive;
+          proxy_set_header Host $host;
+          proxy_cache_bypass $http_upgrade;
+        }
+      }
+
+  - path: /home/azureuser/myapp/index.js
+    owner: azureuser:azureuser
+    permissions: "0644"
+    content: |
+      var express = require('express')
+      var app = express()
+      var os = require('os');
+
+      app.get('/', function (req, res) {
+        res.send('Hello World from host ' + os.hostname() + '!')
+      })
+
+      app.listen(3000, function () {
+        console.log('Hello world app listening on port 3000!')
+      })
+
+  - path: /etc/systemd/system/myapp.service
+    owner: root:root
+    permissions: "0644"
+    content: |
+      [Unit]
+      Description=Node demo app (cloud-init)
+      After=network-online.target
+      Wants=network-online.target
+
+      [Service]
+      Type=simple
+      User=azureuser
+      WorkingDirectory=/home/azureuser/myapp
+      ExecStart=/usr/bin/node /home/azureuser/myapp/index.js
+      Restart=always
+      RestartSec=3
+      Environment=NODE_ENV=production
+
+      [Install]
+      WantedBy=multi-user.target
+
+runcmd:
+  - sudo -u azureuser bash -lc 'cd /home/azureuser/myapp && npm init -y && npm install express'
+  - systemctl daemon-reload
+  - systemctl enable --now myapp
+  - systemctl restart nginx
+
