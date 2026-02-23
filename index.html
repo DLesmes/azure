@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AZ-900 Exam Simulator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f1f5f9}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:3px}
+select{appearance:auto}
+button{transition:all .15s}
+button:hover{filter:brightness(1.05)}
+.fade-in{animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.timer-urgent{animation:pulse 1s infinite}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+// ══════════════════════════════════════════════════════════════════════════════
+// QUESTION BANK - All 3 domains, 3 difficulties, 7 question types
+// ══════════════════════════════════════════════════════════════════════════════
+const Q=[
+// ── DOMAIN 1: CLOUD CONCEPTS ─────────────────────────────────────────────
+// EASY
+{id:"c1",t:"single",d:1,lv:"easy",s:"Which of the following best describes cloud computing?",o:["Installing software on a local computer","The delivery of computing services over the internet","Using a USB drive to store files","Running applications on a single physical server"],c:1,ex:"Cloud computing is the delivery of computing services—including VMs, storage, databases, and networking—over the internet.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/3-what-cloud-compute"},
+{id:"c2",t:"single",d:1,lv:"easy",s:"In the cloud, you only pay for the IT resources you use. This is known as which model?",o:["Capital expenditure model","Consumption-based model","Fixed-cost model","Subscription model"],c:1,ex:"The consumption-based model means you pay only for cloud resources you use.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/6-describe-consumption-based-model"},
+{id:"c3",t:"single",d:1,lv:"easy",s:"Which cloud model provides the MOST flexibility by combining public and private clouds?",o:["Public cloud","Private cloud","Hybrid cloud","Community cloud"],c:2,ex:"Hybrid cloud uses both public and private clouds, offering the most flexibility.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/5-define-cloud-models"},
+{id:"c4",t:"single",d:1,lv:"easy",s:"Which type of expense is associated with purchasing physical servers for an on-premises datacenter?",o:["Operational Expenditure (OpEx)","Capital Expenditure (CapEx)","Consumption-based cost","Variable cost"],c:1,ex:"CapEx is a one-time, up-front expenditure for tangible resources like datacenter hardware.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/6-describe-consumption-based-model"},
+{id:"c5",t:"single",d:1,lv:"easy",s:"Which cloud service model is the MOST complete, where you rent a fully developed application?",o:["IaaS","PaaS","SaaS","FaaS"],c:2,ex:"SaaS is the most complete model—you rent a fully developed application like Microsoft 365.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/4-describe-software-service"},
+{id:"c6",t:"yesno",d:1,lv:"easy",sts:[{tx:"The cloud provider is always responsible for physical datacenter security.",c:true},{tx:"The customer is always responsible for the data stored in the cloud.",c:true},{tx:"The cloud provider is always responsible for the customer's user accounts and identities.",c:false}],ex:"Provider handles physical security. Customer manages data and identities. OS/network controls vary by model.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/4-describe-shared-responsibility-model"},
+{id:"c7",t:"single",d:1,lv:"easy",s:"Which cloud service model provides the MOST control over the operating system?",o:["SaaS","PaaS","IaaS","Serverless"],c:2,ex:"IaaS provides maximum control over OS and installed software.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/2-describe-infrastructure-service"},
+{id:"c8",t:"single",d:1,lv:"easy",s:"Which benefit of cloud computing ensures resources are available despite disruptions?",o:["Scalability","High availability","Elasticity","Agility"],c:1,ex:"High availability ensures maximum availability regardless of disruptions, backed by SLA guarantees.",src:"https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/2-high-availability-scalability-cloud"},
+{id:"c9",t:"dd",d:1,lv:"easy",s:"Match each cloud service model to its description.",items:["Rent fully developed applications","Rent hardware in a cloud datacenter","Development environment without managing infrastructure"],tgts:["SaaS","IaaS","PaaS"],cm:[0,1,2],ex:"SaaS=fully developed apps. IaaS=rent hardware. PaaS=development platform.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/1-introduction"},
+{id:"c10",t:"single",d:1,lv:"easy",s:"Adding more CPUs or RAM to a single VM is an example of which scaling type?",o:["Horizontal scaling (scaling out)","Vertical scaling (scaling up)","Elasticity","Load balancing"],c:1,ex:"Vertical scaling changes capabilities of a single resource (adding CPUs/RAM).",src:"https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/2-high-availability-scalability-cloud"},
+// MEDIUM
+{id:"c11",t:"single",d:1,lv:"medium",s:"A company uses public cloud for web hosting but keeps its financial database on-premises due to compliance. Which cloud model?",o:["Public cloud","Private cloud","Hybrid cloud","Multi-cloud"],c:2,ex:"Using both public and private cloud interconnected = hybrid cloud.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/5-define-cloud-models"},
+{id:"c12",t:"yesno",d:1,lv:"medium",sts:[{tx:"In SaaS, the customer manages the underlying operating system.",c:false},{tx:"In IaaS, the cloud provider patches the guest operating system.",c:false},{tx:"PaaS places more responsibility on the customer than SaaS but less than IaaS.",c:true}],ex:"SaaS: provider handles OS. IaaS: customer patches guest OS. PaaS is the middle ground.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/4-describe-shared-responsibility-model"},
+{id:"c13",t:"scenario",d:1,lv:"medium",sc:"Your organization wants to deploy a web application without managing servers, operating systems, or runtime environments. They want to focus solely on writing application code.",qs:[{tx:"Proposed solution: Use IaaS. Does this meet the goal?",c:false},{tx:"Proposed solution: Use PaaS. Does this meet the goal?",c:true},{tx:"Proposed solution: Use SaaS. Does this meet the goal?",c:false}],ex:"PaaS provides a development environment without infrastructure management. IaaS requires managing OS. SaaS provides finished software.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/3-describe-platform-service"},
+{id:"c14",t:"drop",d:1,lv:"medium",s:"Complete the sentences:\n1. The ability to adjust resources to meet demand is called ____.\n2. Adding more VMs to handle increased traffic is called ____.",blanks:[{o:["high availability","scalability","elasticity","agility"],c:1},{o:["vertical scaling","horizontal scaling","load balancing","fault tolerance"],c:1}],ex:"Scalability adjusts resources to demand. Horizontal scaling adds more instances.",src:"https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/2-high-availability-scalability-cloud"},
+{id:"c15",t:"multi",d:1,lv:"medium",s:"Which TWO are benefits of the consumption-based model? (Select two)",o:["No upfront costs","Guaranteed fixed monthly pricing","Ability to stop paying for unused resources","Unlimited free usage during trials"],c:[0,2],ex:"Consumption-based = no upfront costs + stop paying when resources are no longer needed.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/6-describe-consumption-based-model"},
+{id:"c16",t:"correct",d:1,lv:"medium",s:"Azure [Virtual Machines] is an example of Software as a Service (SaaS).",ul:"Virtual Machines",o:["No change needed","App Service","Microsoft 365","Kubernetes Service"],c:2,ex:"Azure VMs = IaaS. Microsoft 365 = SaaS.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/4-describe-software-service"},
+{id:"c17",t:"single",d:1,lv:"medium",s:"Which describes the ability of a system to recover from failures and continue to function?",o:["Scalability","High availability","Reliability","Predictability"],c:2,ex:"Reliability = ability to recover from failures. A pillar of the Azure Well-Architected Framework.",src:"https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/3-reliability-predictability-cloud"},
+{id:"c18",t:"single",d:1,lv:"medium",s:"Using a web portal, CLI, or APIs to manage cloud resources describes which concept?",o:["Management OF the cloud","Management IN the cloud","Cloud governance","Cloud automation"],c:1,ex:"Management IN the cloud = HOW you manage (portal, CLI, APIs). Management OF = WHAT you manage.",src:"https://learn.microsoft.com/en-us/training/modules/describe-benefits-use-cloud-services/5-manageability-cloud"},
+// HARD
+{id:"c19",t:"yesno",d:1,lv:"hard",sts:[{tx:"In a hybrid cloud, an organization can run apps in the public cloud and keep sensitive data in the private cloud.",c:true},{tx:"A multi-cloud environment requires the use of Azure Arc.",c:false},{tx:"Azure VMware Solution enables running VMware workloads in Azure.",c:true}],ex:"Hybrid allows choosing where services run. Arc helps but isn't required. VMware Solution enables VMware in Azure.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/5-define-cloud-models"},
+{id:"c20",t:"single",d:1,lv:"hard",s:"A company deploys Azure SQL Database (PaaS). Under shared responsibility, which is the CUSTOMER's responsibility?",o:["Patching the database engine","Physical security of the server","Managing the data stored in the database","Maintaining network connectivity to the datacenter"],c:2,ex:"With PaaS, the provider manages patching and infrastructure. Customer is always responsible for data.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/4-describe-shared-responsibility-model"},
+{id:"c21",t:"single",d:1,lv:"hard",s:"An org uses AWS for analytics and Azure for web hosting with a single management plane. Which approach?",o:["Hybrid cloud with Azure Arc","Multi-cloud with Azure Arc","Private cloud with VPN","Public cloud with ExpressRoute"],c:1,ex:"Multiple public providers = multi-cloud. Azure Arc provides a single management plane.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-compute/5-define-cloud-models"},
+{id:"c22",t:"scenario",d:1,lv:"hard",sc:"A startup needs built-in scalability and high availability, without managing infrastructure, using Node.js for a web app.",qs:[{tx:"Proposed solution: Deploy Azure VMs with Node.js. Does this meet the goal?",c:false},{tx:"Proposed solution: Use Azure App Service with Node.js runtime. Does this meet the goal?",c:true},{tx:"Proposed solution: Subscribe to a SaaS web builder. Does this meet the goal?",c:false}],ex:"App Service (PaaS) provides scalability, HA, and Node.js support without infrastructure management.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/3-describe-platform-service"},
+
+// ── DOMAIN 2: AZURE ARCHITECTURE AND SERVICES ────────────────────────────
+// EASY
+{id:"a1",t:"single",d:2,lv:"easy",s:"What is the basic building block of Azure that represents a single service instance?",o:["Subscription","Resource group","Resource","Management group"],c:2,ex:"Resources are the basic building blocks: VMs, databases, storage, etc.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/6-describe-azure-management-infrastructure"},
+{id:"a2",t:"single",d:2,lv:"easy",s:"How many availability zones exist at minimum in an AZ-enabled Azure region?",o:["1","2","3","5"],c:2,ex:"Minimum of 3 separate availability zones in all AZ-enabled regions.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure"},
+{id:"a3",t:"single",d:2,lv:"easy",s:"Which Azure service provides serverless compute where code runs in response to events?",o:["Azure Virtual Machines","Azure App Service","Azure Functions","Azure Kubernetes Service"],c:2,ex:"Azure Functions is serverless compute that runs code in response to events/triggers.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/6-functions"},
+{id:"a4",t:"single",d:2,lv:"easy",s:"Which is a cloud-based identity and access management service?",o:["Azure Policy","Microsoft Entra ID","Azure Monitor","Azure Key Vault"],c:1,ex:"Microsoft Entra ID (formerly Azure AD) is Azure's identity and access management service.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/2-directory-services"},
+{id:"a5",t:"single",d:2,lv:"easy",s:"Which storage redundancy stores three copies within a single datacenter?",o:["ZRS","GRS","LRS","RA-GRS"],c:2,ex:"LRS stores 3 copies in a single datacenter—lowest cost option.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/3-redundancy"},
+{id:"a6",t:"dd",d:2,lv:"easy",s:"Match each Azure service to its cloud service type.",items:["Azure Virtual Machines","Azure App Service","Microsoft 365"],tgts:["IaaS","PaaS","SaaS"],cm:[0,1,2],ex:"VMs=IaaS. App Service=PaaS. M365=SaaS.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cloud-service-types/1-introduction"},
+{id:"a7",t:"single",d:2,lv:"easy",s:"What is the max usable capacity of a single Azure Data Box device?",o:["35 TB","40 TB","80 TB","100 TB"],c:2,ex:"Azure Data Box has 80 TB usable capacity per device.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/6-identify-azure-data-migration-options"},
+{id:"a8",t:"single",d:2,lv:"easy",s:"Which extends on-premises networks to Azure over a PRIVATE connection (not internet)?",o:["Azure VPN Gateway","Azure ExpressRoute","Azure Virtual Network","Azure DNS"],c:1,ex:"ExpressRoute extends on-prem to Azure over a private connection.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/11-expressroute"},
+{id:"a9",t:"single",d:2,lv:"easy",s:"Which prompts for extra identification beyond a password?",o:["SSO","MFA","RBAC","Conditional Access"],c:1,ex:"MFA requires additional factor: something you know, have, or are.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/3-authentication-methods"},
+{id:"a10",t:"single",d:2,lv:"easy",s:"Which blob access tier is the default, optimized for frequently accessed data?",o:["Cool","Cold","Hot","Archive"],c:2,ex:"Hot tier is default—highest storage cost, lowest access cost.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/4-describe-azure-storage-services"},
+// MEDIUM
+{id:"a11",t:"yesno",d:2,lv:"medium",sts:[{tx:"A resource can belong to multiple resource groups simultaneously.",c:false},{tx:"Resource groups can be nested inside other resource groups.",c:false},{tx:"Resources within a resource group can be in different Azure regions.",c:true}],ex:"Resource = ONE group. Groups can't nest. Resources in group CAN be in different regions.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/6-describe-azure-management-infrastructure"},
+{id:"a12",t:"single",d:2,lv:"medium",s:"A company needs thousands of identical, load-balanced VMs that auto-scale. Which service?",o:["VM Availability Sets","VM Scale Sets","Azure Functions","Azure Container Instances"],c:1,ex:"VM Scale Sets create identical, load-balanced VMs with auto-scaling.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/2-virtual-machines"},
+{id:"a13",t:"drop",d:2,lv:"medium",s:"Complete the sentences:\n1. Fastest way to run a single container without VM management: ____.\n2. Container orchestration for managing a fleet: ____.",blanks:[{o:["Azure VMs","Azure Container Instances","Azure Kubernetes Service","Azure Functions"],c:1},{o:["Azure Container Instances","Azure Kubernetes Service","Azure App Service","Azure Batch"],c:1}],ex:"ACI=fastest single container. AKS=orchestration for fleets.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/5-containers"},
+{id:"a14",t:"single",d:2,lv:"medium",s:"Which redundancy replicates across 3 AZs in primary AND to a secondary region with read access?",o:["GRS","ZRS","RA-GRS","RA-GZRS"],c:3,ex:"RA-GZRS = ZRS primary + LRS secondary + read access to secondary.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/3-redundancy"},
+{id:"a15",t:"yesno",d:2,lv:"medium",sts:[{tx:"Azure DNS can purchase domain names.",c:false},{tx:"Azure DNS supports alias record sets that auto-update when resource IPs change.",c:true},{tx:"VPN Gateway encrypts all data transferred between Azure and on-premises.",c:true}],ex:"Azure DNS does NOT purchase domains. It supports alias records. VPN Gateway encrypts data.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/12-domain-name-system"},
+{id:"a16",t:"single",d:2,lv:"medium",s:"Which provides managed domain join, group policy, LDAP, Kerberos WITHOUT deploying domain controllers?",o:["Microsoft Entra ID","Microsoft Entra Domain Services","Azure AD B2C","Azure Key Vault"],c:1,ex:"Entra Domain Services provides managed domain services without domain controllers.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/2-directory-services"},
+{id:"a17",t:"scenario",d:2,lv:"medium",sc:"Your org needs VMs protected against datacenter-level failures within a single region.",qs:[{tx:"Deploy VMs across multiple availability zones. Does this meet the goal?",c:true},{tx:"Deploy VMs in a single availability set. Does this meet the goal?",c:false},{tx:"Deploy VMs in different resource groups. Does this meet the goal?",c:false}],ex:"AZs protect against datacenter failures. Availability sets protect against rack failures. Resource groups are logical.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure"},
+{id:"a18",t:"correct",d:2,lv:"medium",s:"Azure [Blob Storage] provides fully managed file shares via SMB protocol.",ul:"Blob Storage",o:["No change needed","Azure Files","Azure Queue Storage","Azure Table Storage"],c:1,ex:"Azure Files provides SMB file shares. Blob Storage is for unstructured objects.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/4-describe-azure-storage-services"},
+{id:"a19",t:"single",d:2,lv:"medium",s:"Which Zero Trust principle states to minimize blast radius and segment access?",o:["Verify explicitly","Least privilege access","Assume breach","Defense in depth"],c:2,ex:"'Assume breach' = minimize blast radius, segment access, verify encryption.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/7-describe-zero-trust-model"},
+{id:"a20",t:"single",d:2,lv:"medium",s:"What is the minimum distance between paired Azure regions?",o:["100 miles","200 miles","300 miles","500 miles"],c:2,ex:"Most paired regions are at least 300 miles apart.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/5-describe-azure-physical-infrastructure"},
+// HARD
+{id:"a21",t:"yesno",d:2,lv:"hard",sts:[{tx:"Even with ExpressRoute, DNS queries still travel over the public internet.",c:true},{tx:"You can deploy multiple VPN gateways in a single VNet.",c:false},{tx:"VNet peering allows private traffic across different Azure regions.",c:true}],ex:"DNS goes over internet even with ExpressRoute. ONE VPN gateway per VNet. Global peering works.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/11-expressroute"},
+{id:"a22",t:"single",d:2,lv:"hard",s:"A legacy app requires LDAP and domain join but can't use modern auth. Which service?",o:["Microsoft Entra ID","Microsoft Entra Domain Services","Azure AD B2C","Conditional Access"],c:1,ex:"Entra Domain Services provides LDAP, Kerberos, domain join for legacy apps.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/2-directory-services"},
+{id:"a23",t:"dd",d:2,lv:"hard",s:"Match each storage redundancy to its durability level.",items:["LRS","ZRS","GRS/RA-GRS/GZRS/RA-GZRS"],tgts:["11 nines","12 nines","16 nines"],cm:[0,1,2],ex:"LRS=11 nines. ZRS=12 nines. Geo-redundant=16 nines.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/3-redundancy"},
+{id:"a24",t:"single",d:2,lv:"hard",s:"Which defense-in-depth layer is at the CENTER (innermost)?",o:["Application","Compute","Data","Identity & Access"],c:2,ex:"Data is innermost: Physical→Identity→Perimeter→Network→Compute→Application→Data.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/8-describe-defense-depth"},
+{id:"a25",t:"single",d:2,lv:"hard",s:"Need bidirectional file sync between on-prem Windows servers and Azure with cloud tiering. Which tool?",o:["AzCopy","Azure Storage Explorer","Azure File Sync","Azure Data Box"],c:2,ex:"Azure File Sync provides bidirectional sync with cloud tiering.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/7-identify-azure-file-movement-options"},
+{id:"a26",t:"yesno",d:2,lv:"hard",sts:[{tx:"Management group tree supports up to 6 levels of depth (excluding root and subscription).",c:true},{tx:"A directory supports up to 10,000 management groups.",c:true},{tx:"Each management group can have multiple parents.",c:false}],ex:"Max 6 levels. Max 10,000 groups. Each group has exactly ONE parent.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/6-describe-azure-management-infrastructure"},
+{id:"a27",t:"single",d:2,lv:"hard",s:"Which Conditional Access signal uses ML to detect potentially fraudulent sign-ins?",o:["IP location","Device state","Real-time sign-in risk","User group membership"],c:2,ex:"Real-time sign-in risk uses ML to evaluate if sign-in is fraudulent.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-identity-access-security/5-conditional-access"},
+{id:"a28",t:"drop",d:2,lv:"hard",s:"Complete:\n1. Minimum retention for Cool blob tier: ____ days.\n2. Minimum retention for Archive blob tier: ____ days.",blanks:[{o:["7","30","90","180"],c:1},{o:["30","90","180","365"],c:2}],ex:"Cool=30-day min. Archive=180-day min.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-storage-services/4-describe-azure-storage-services"},
+{id:"a29",t:"single",d:2,lv:"hard",s:"Azure free account provides how much credit for the first 30 days?",o:["$100","$150","$200","$250"],c:2,ex:"Azure free account includes $200 credit for the first 30 days.",src:"https://learn.microsoft.com/en-us/training/modules/describe-core-architectural-components-of-azure/3-get-started-azure-accounts"},
+{id:"a30",t:"single",d:2,lv:"medium",s:"Which service provides a desktop and app virtualization supporting Windows 10/11 Enterprise multi-session?",o:["Azure VMs","Azure Virtual Desktop","Azure App Service","Azure Container Instances"],c:1,ex:"Azure Virtual Desktop provides Windows 10/11 Enterprise multi-session—unique to this service.",src:"https://learn.microsoft.com/en-us/training/modules/describe-azure-compute-networking-services/4-virtual-desktop"},
+
+// ── DOMAIN 3: MANAGEMENT AND GOVERNANCE ──────────────────────────────────
+// EASY
+{id:"m1",t:"single",d:3,lv:"easy",s:"Which tool estimates the cost of Azure services BEFORE deploying them?",o:["Azure Cost Management","Azure Pricing Calculator","Azure TCO Calculator","Azure Advisor"],c:1,ex:"The Pricing Calculator estimates costs before deployment.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/3-compare-pricing-total-cost-of-ownership-calculators"},
+{id:"m2",t:"single",d:3,lv:"easy",s:"Which provides recommendations for reliability, security, performance, cost, and operational excellence?",o:["Azure Monitor","Azure Service Health","Azure Advisor","Microsoft Defender"],c:2,ex:"Azure Advisor provides recommendations across 5 categories.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/2-describe-purpose-of-azure-advisor"},
+{id:"m3",t:"single",d:3,lv:"easy",s:"What is the maximum number of tags per Azure resource?",o:["10","25","50","100"],c:2,ex:"Maximum 50 tags per resource, resource group, or subscription.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/7-describe-purpose-of-tags"},
+{id:"m4",t:"single",d:3,lv:"easy",s:"Which resource lock type allows reading and modifying but prevents deletion?",o:["ReadOnly lock","Delete lock","CanNotModify lock","NoAccess lock"],c:1,ex:"Delete lock allows read+modify but prevents deletion.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/4-describe-purpose-resource-locks"},
+{id:"m5",t:"single",d:3,lv:"easy",s:"Which service creates, assigns, and manages policies that control or audit resources?",o:["Azure RBAC","Azure Policy","Azure Blueprints","Resource locks"],c:1,ex:"Azure Policy enforces rules on resources for compliance with corporate standards.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/3-describe-purpose-azure-policy"},
+{id:"m6",t:"single",d:3,lv:"easy",s:"Which uses declarative JSON templates to deploy infrastructure as code?",o:["Azure CLI","Azure PowerShell","ARM templates","Azure Portal"],c:2,ex:"ARM templates use declarative JSON for repeatable infrastructure deployments.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/4-describe-azure-resource-manager-azure-arm-templates"},
+{id:"m7",t:"single",d:3,lv:"easy",s:"Which provides a global view of health status of ALL Azure services across ALL regions?",o:["Azure Monitor","Azure Status","Resource Health","Azure Advisor"],c:1,ex:"Azure Status provides global health view of all Azure services.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/3-describe-azure-service-health"},
+{id:"m8",t:"single",d:3,lv:"easy",s:"Which tool collects, analyzes, and acts on telemetry from Azure resources?",o:["Azure Advisor","Azure Monitor","Azure Service Health","Azure Policy"],c:1,ex:"Azure Monitor collects, analyzes, visualizes, and acts on resource telemetry.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/4-describe-azure-monitor"},
+// MEDIUM
+{id:"m9",t:"dd",d:3,lv:"medium",s:"Match each calculator to its purpose.",items:["Estimate costs for new Azure deployments","Compare migration savings: on-prem vs Azure"],tgts:["Pricing Calculator","TCO Calculator"],cm:[0,1],ex:"Pricing=estimate new Azure costs. TCO=compare on-prem vs Azure savings.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/3-compare-pricing-total-cost-of-ownership-calculators"},
+{id:"m10",t:"yesno",d:3,lv:"medium",sts:[{tx:"Tags on a resource group are automatically inherited by child resources.",c:false},{tx:"Tags can be enforced using Azure Policy.",c:true},{tx:"Tag names are case-sensitive.",c:false}],ex:"Tags are NOT inherited. Tags CAN be enforced via Policy. Names are case-insensitive (values are sensitive).",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/7-describe-purpose-of-tags"},
+{id:"m11",t:"single",d:3,lv:"medium",s:"Which reduces VM costs by up to 72% with a 1- or 3-year commitment?",o:["Spot instances","Reserved instances","Pay-as-you-go","Azure Hybrid Benefit"],c:1,ex:"Reserved instances offer up to 72% savings with 1 or 3-year terms.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/2-describe-factors-affect-costs-azure"},
+{id:"m12",t:"single",d:3,lv:"medium",s:"Which extends Azure management to hybrid and multi-cloud environments?",o:["Azure Policy","Azure Arc","Azure Resource Manager","Azure Lighthouse"],c:1,ex:"Azure Arc extends Azure management to hybrid and multi-cloud.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/3-describe-purpose-of-azure-arc"},
+{id:"m13",t:"correct",d:3,lv:"medium",s:"Azure [Advisor] collects, analyzes, and acts on telemetry from Azure and multi-cloud environments.",ul:"Advisor",o:["No change needed","Monitor","Service Health","Defender for Cloud"],c:1,ex:"Azure Monitor collects telemetry. Advisor provides recommendations.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/4-describe-azure-monitor"},
+{id:"m14",t:"single",d:3,lv:"medium",s:"Which language does Azure Log Analytics use for queries?",o:["SQL","PowerShell","Kusto Query Language (KQL)","Python"],c:2,ex:"Log Analytics uses KQL for writing and running log queries.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/4-describe-azure-monitor"},
+{id:"m15",t:"single",d:3,lv:"medium",s:"At what thresholds do EA credit alerts trigger in Cost Management?",o:["50% and 75%","75% and 100%","80% and 100%","90% and 100%"],c:3,ex:"EA credit alerts trigger at 90% and 100% of prepayment amount.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/6-describe-azure-tool"},
+{id:"m16",t:"scenario",d:3,lv:"medium",sc:"Your company wants all new VMs deployed with a specific cost-tracking tag. If missing, it should be auto-added.",qs:[{tx:"Use Azure RBAC to require tags. Does this meet the goal?",c:false},{tx:"Use Azure Policy with auto-remediation. Does this meet the goal?",c:true},{tx:"Use resource locks on all VMs. Does this meet the goal?",c:false}],ex:"Azure Policy can enforce tags and auto-remediate. RBAC controls user permissions. Locks prevent deletion.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/3-describe-purpose-azure-policy"},
+{id:"m17",t:"single",d:3,lv:"medium",s:"Which is generally FREE when transferring data in Azure?",o:["Outbound to internet","Inbound from internet","Between Azure regions","To CDN edge nodes"],c:1,ex:"Inbound data transfer (into Azure) is generally free.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/2-describe-factors-affect-costs-azure"},
+// HARD
+{id:"m18",t:"yesno",d:3,lv:"hard",sts:[{tx:"A ReadOnly lock on a storage account prevents adding new blobs.",c:true},{tx:"Resource locks apply regardless of RBAC—even Owners must remove the lock first.",c:true},{tx:"A Delete lock on a resource group only prevents deleting the group, not resources inside.",c:false}],ex:"ReadOnly prevents modifications. Locks override RBAC. Delete lock blocks group AND resource deletion.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/4-describe-purpose-resource-locks"},
+{id:"m19",t:"single",d:3,lv:"hard",s:"Which Azure Monitor component sends synthetic requests to test app availability during low-activity?",o:["Azure Log Analytics","Azure Monitor Alerts","Application Insights","Azure Service Health"],c:2,ex:"Application Insights can send synthetic requests to test availability.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/4-describe-azure-monitor"},
+{id:"m20",t:"single",d:3,lv:"hard",s:"Bicep compiles into which format?",o:["YAML","XML","ARM template JSON","PowerShell scripts"],c:2,ex:"Bicep compiles to ARM template JSON, supporting all resource types immediately.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/4-describe-azure-resource-manager-azure-arm-templates"},
+{id:"m21",t:"drop",d:3,lv:"hard",s:"Complete:\n1. ____ provides audit reports and compliance docs FROM Microsoft.\n2. ____ provides unified data governance for YOUR org's data.",blanks:[{o:["Microsoft Purview","Service Trust Portal","Azure Policy","Compliance Manager"],c:1},{o:["Service Trust Portal","Microsoft Purview","Azure Advisor","Defender for Cloud"],c:1}],ex:"Service Trust Portal = Microsoft's docs. Purview = YOUR organization's data governance.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/2-describe-purpose-microsoft-purview"},
+{id:"m22",t:"single",d:3,lv:"hard",s:"Building a business case for on-prem to Azure migration showing 3-year savings. Which tool?",o:["Pricing Calculator","Cost Management","TCO Calculator","Azure Advisor"],c:2,ex:"TCO Calculator compares on-prem vs Azure costs, projecting savings over 1-5 years.",src:"https://learn.microsoft.com/en-us/training/modules/describe-cost-management-azure/3-compare-pricing-total-cost-of-ownership-calculators"},
+{id:"m23",t:"yesno",d:3,lv:"hard",sts:[{tx:"Azure Policy evaluates compliance during a standard 24-hour cycle.",c:true},{tx:"Azure Policy can prevent noncompliant resources from being created.",c:true},{tx:"Policy initiatives can only contain up to 10 definitions.",c:false}],ex:"Policy evaluates every 24h + on changes. Can block noncompliant creation. Initiatives can have 100+ definitions.",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-azure-for-governance-compliance/3-describe-purpose-azure-policy"},
+{id:"m24",t:"single",d:3,lv:"hard",s:"Azure Cloud Shell supports which TWO shell environments?",o:["PowerShell and Bash","PowerShell and CMD","Bash and Python","CMD and Bash"],c:0,ex:"Cloud Shell supports Azure PowerShell and Azure CLI (Bash).",src:"https://learn.microsoft.com/en-us/training/modules/describe-features-tools-manage-deploy-azure-resources/2-describe-interacting-azure"},
+{id:"m25",t:"single",d:3,lv:"hard",s:"Which Azure Advisor category is integrated with Microsoft Defender for Cloud?",o:["Reliability","Security","Performance","Cost"],c:1,ex:"The Security category integrates with Microsoft Defender for Cloud for threat detection.",src:"https://learn.microsoft.com/en-us/training/modules/describe-monitoring-tools-azure/2-describe-purpose-of-azure-advisor"},
+];
+
+// ══════════════════════════════════════════════════════════════════════════════
+// EXAM CONFIG
+// ══════════════════════════════════════════════════════════════════════════════
+const CFG={
+  easy:{label:"Easy",qs:32,time:55*60,desc:"Primarily definitions and recall with clear answer choices",clr:"#22c55e"},
+  medium:{label:"Medium",qs:40,time:50*60,desc:"Mix of scenarios, traps, and similar-sounding options",clr:"#f59e0b"},
+  hard:{label:"Hard",qs:48,time:45*60,desc:"Realistic exam simulation with all question types and time pressure",clr:"#ef4444"}
+};
+const DN={1:"Cloud Concepts",2:"Azure Architecture & Services",3:"Management & Governance"};
+
+function buildExam(diff){
+  const cfg=CFG[diff];
+  const n=cfg.qs;
+  const d1=Math.round(n*0.27),d2=Math.round(n*0.38),d3=n-d1-d2;
+  const pick=(pool,cnt)=>[...pool].sort(()=>Math.random()-.5).slice(0,Math.min(cnt,pool.length));
+  const pool=d=>{
+    const bd=Q.filter(q=>q.d===d);
+    if(diff==="easy")return[...bd.filter(q=>q.lv==="easy"),...bd.filter(q=>q.lv==="medium")];
+    if(diff==="hard")return[...bd.filter(q=>q.lv==="hard"),...bd.filter(q=>q.lv==="medium"),...bd.filter(q=>q.lv==="easy")];
+    return bd.sort(()=>Math.random()-.5);
+  };
+  const sel=[...pick(pool(1),d1),...pick(pool(2),d2),...pick(pool(3),d3)].sort(()=>Math.random()-.5);
+  const flat=[];
+  sel.forEach(q=>{
+    if(q.t==="scenario"){
+      q.qs.forEach((sq,si)=>flat.push({...q,_si:si,_st:q.qs.length,_fid:`${q.id}-s${si}`}));
+    }else flat.push({...q,_fid:q.id});
+  });
+  return flat;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════════════════════════════════════════
+function calcScore(qs,ans){
+  let earned=0,total=0;const details=[];
+  qs.forEach((q,i)=>{
+    const a=ans[i];let correct=false,pts=0,mx=1;
+    if(q.t==="single"){correct=a===q.c;pts=correct?1:0;}
+    else if(q.t==="multi"){mx=1;const s=a||[];correct=JSON.stringify([...s].sort())==JSON.stringify([...q.c].sort());pts=correct?1:0;}
+    else if(q.t==="yesno"){mx=q.sts.length;const aa=a||[];pts=q.sts.reduce((s,st,j)=>s+(aa[j]===st.c?1:0),0);correct=pts===mx;}
+    else if(q.t==="scenario"){const sq=q.qs[q._si];correct=a===sq.c;pts=correct?1:0;}
+    else if(q.t==="dd"){mx=q.items.length;const aa=a||[];pts=q.items.reduce((s,_,j)=>s+(aa[j]===q.cm[j]?1:0),0);correct=pts===mx;}
+    else if(q.t==="drop"){mx=q.blanks.length;const aa=a||[];pts=q.blanks.reduce((s,b,j)=>s+(aa[j]===b.c?1:0),0);correct=pts===mx;}
+    else if(q.t==="correct"){correct=a===q.c;pts=correct?1:0;}
+    earned+=pts;total+=mx;details.push({q,a,correct,pts,mx});
+  });
+  return{earned,total,scaled:total>0?Math.round(earned/total*1000):0,details};
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// COMPONENTS
+// ══════════════════════════════════════════════════════════════════════════════
+function Timer({sec}){
+  const m=Math.floor(sec/60),s=sec%60,u=sec<120;
+  return <div className={u?"timer-urgent":""} style={{fontFamily:"'Segoe UI Semibold',monospace",fontSize:22,fontWeight:700,color:u?"#ef4444":"#1e3a5f",background:u?"#fef2f2":"#e8f0fe",padding:"8px 20px",borderRadius:8,display:"inline-flex",alignItems:"center",gap:8,border:`2px solid ${u?"#fca5a5":"#93b4e0"}`}}>
+    ⏱ {String(m).padStart(2,"0")}:{String(s).padStart(2,"0")}
+  </div>;
+}
+
+function Badge({type}){
+  const m={single:{l:"Multiple Choice",c:"#2563eb"},multi:{l:"Multi-Select",c:"#7c3aed"},yesno:{l:"Yes / No Hotspot",c:"#7c3aed"},scenario:{l:"Repeated Scenario",c:"#0891b2"},dd:{l:"Drag & Drop Match",c:"#059669"},drop:{l:"Dropdown Select",c:"#d97706"},correct:{l:"Correct the Statement",c:"#dc2626"}};
+  const i=m[type]||{l:type,c:"#6b7280"};
+  return <span style={{fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:1.2,color:i.c,background:`${i.c}15`,padding:"4px 10px",borderRadius:20,border:`1px solid ${i.c}30`}}>{i.l}</span>;
+}
+
+function Opts({opts,ans,set,correct,review,multi,name}){
+  const sel=multi?(ans||[]):null;
+  return <div style={{display:"flex",flexDirection:"column",gap:10}}>
+    {multi&&<div style={{fontSize:13,color:"#6b7280",fontStyle:"italic"}}>Select two answers</div>}
+    {opts.map((o,i)=>{
+      const isC=multi?correct.includes(i):i===correct;
+      let bg="#fff",bd="#cbd5e1";
+      if(review){if(isC){bg="#dcfce7";bd="#22c55e";}else if(multi?sel?.includes(i):ans===i){bg="#fee2e2";bd="#ef4444";}}
+      else if(multi?sel?.includes(i):ans===i){bg="#dbeafe";bd="#2563eb";}
+      return <label key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",background:bg,border:`2px solid ${bd}`,borderRadius:10,cursor:review?"default":"pointer"}}>
+        {multi?<input type="checkbox" checked={sel?.includes(i)||false} disabled={review} onChange={()=>{if(review)return;const n=sel?.includes(i)?sel.filter(x=>x!==i):[...(sel||[]),i];set(n);}} style={{width:18,height:18,accentColor:"#2563eb"}}/>
+        :<input type="radio" name={name} checked={ans===i} disabled={review} onChange={()=>!review&&set(i)} style={{width:18,height:18,accentColor:"#2563eb"}}/>}
+        <span style={{fontSize:15}}>{o}</span>
+      </label>;
+    })}
+  </div>;
+}
+
+function YesNo({q,ans,set,review}){
+  const a=ans||q.sts.map(()=>null);
+  return <div style={{border:"1px solid #e2e8f0",borderRadius:10,overflow:"hidden"}}>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 80px 80px",background:"#1e3a5f",color:"#fff",fontWeight:700,fontSize:13}}>
+      <div style={{padding:"10px 16px"}}>Statement</div><div style={{padding:"10px 8px",textAlign:"center"}}>Yes</div><div style={{padding:"10px 8px",textAlign:"center"}}>No</div>
+    </div>
+    {q.sts.map((st,i)=>{
+      let bg=i%2===0?"#f8fafc":"#fff";
+      if(review)bg=a[i]===st.c?"#dcfce7":"#fee2e2";
+      return <div key={i} style={{display:"grid",gridTemplateColumns:"1fr 80px 80px",borderTop:"1px solid #e2e8f0",background:bg}}>
+        <div style={{padding:"12px 16px",fontSize:14,lineHeight:1.5}}>{st.tx}</div>
+        {[true,false].map(v=><div key={String(v)} style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+          <input type="radio" name={`${q._fid}-${i}`} checked={a[i]===v} disabled={review} onChange={()=>{const n=[...a];n[i]=v;set(n);}} style={{width:18,height:18,accentColor:"#2563eb"}}/>
+        </div>)}
+      </div>;
+    })}
+  </div>;
+}
+
+function Scenario({q,ans,set,review}){
+  const sq=q.qs[q._si];
+  return <div>
+    <div style={{background:"#f0f4ff",border:"1px solid #bfdbfe",borderRadius:10,padding:16,marginBottom:16,fontSize:14,lineHeight:1.6}}>
+      <div style={{fontWeight:700,color:"#1e3a5f",marginBottom:8,fontSize:12,textTransform:"uppercase",letterSpacing:1}}>Scenario ({q._si+1} of {q._st})</div>{q.sc}
+    </div>
+    <div style={{fontWeight:600,fontSize:15,marginBottom:12}}>{sq.tx}</div>
+    <div style={{display:"flex",gap:12}}>
+      {[true,false].map(v=>{
+        let bg="#fff",bd="#cbd5e1";
+        if(review){if(v===sq.c){bg="#dcfce7";bd="#22c55e";}else if(ans===v){bg="#fee2e2";bd="#ef4444";}}
+        else if(ans===v){bg="#dbeafe";bd="#2563eb";}
+        return <label key={String(v)} style={{flex:1,display:"flex",justifyContent:"center",alignItems:"center",gap:8,padding:"14px 20px",background:bg,border:`2px solid ${bd}`,borderRadius:10,cursor:review?"default":"pointer",fontWeight:600,fontSize:15}}>
+          <input type="radio" name={q._fid} checked={ans===v} disabled={review} onChange={()=>!review&&set(v)} style={{width:18,height:18,accentColor:"#2563eb"}}/>{v?"Yes":"No"}
+        </label>;
+      })}
+    </div>
+  </div>;
+}
+
+function DragDrop({q,ans,set,review}){
+  const a=ans||q.items.map(()=>null);
+  return <div style={{display:"flex",flexDirection:"column",gap:12}}>
+    <div style={{fontSize:13,color:"#6b7280",fontStyle:"italic"}}>Match each item to its correct category</div>
+    {q.items.map((item,i)=>{
+      let bg="#fff",bd="#cbd5e1";
+      if(review){bg=a[i]===q.cm[i]?"#dcfce7":"#fee2e2";bd=a[i]===q.cm[i]?"#22c55e":"#ef4444";}
+      return <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 16px",background:bg,border:`2px solid ${bd}`,borderRadius:10,flexWrap:"wrap"}}>
+        <span style={{flex:1,fontSize:14,fontWeight:500,minWidth:120}}>{item}</span>
+        <span style={{color:"#6b7280"}}>→</span>
+        <select value={a[i]??"" } disabled={review} onChange={e=>{const n=[...a];n[i]=e.target.value===""?null:parseInt(e.target.value);set(n);}} style={{padding:"8px 12px",borderRadius:8,border:"1px solid #cbd5e1",fontSize:14,minWidth:140}}>
+          <option value="">Select...</option>{q.tgts.map((t,j)=><option key={j} value={j}>{t}</option>)}
+        </select>
+        {review&&<span style={{fontWeight:600,fontSize:13,color:"#2563eb"}}>✓ {q.tgts[q.cm[i]]}</span>}
+      </div>;
+    })}
+  </div>;
+}
+
+function Dropdown({q,ans,set,review}){
+  const a=ans||q.blanks.map(()=>null);let bi=-1;
+  return <div style={{fontSize:15,lineHeight:2.2}}>
+    {q.s.split("\n").map((line,li)=>{
+      if(/^\d+\./.test(line.trim())){
+        bi++;const idx=bi;const b=q.blanks[idx];
+        let bg="#fff",bd="#cbd5e1";
+        if(review){bg=a[idx]===b.c?"#dcfce7":"#fee2e2";bd=a[idx]===b.c?"#22c55e":"#ef4444";}
+        return <div key={li} style={{marginBottom:8}}>
+          {line.trim().replace(/____.*/, "")}
+          <select value={a[idx]??""} disabled={review} onChange={e=>{const n=[...a];n[idx]=e.target.value===""?null:parseInt(e.target.value);set(n);}} style={{padding:"6px 10px",borderRadius:8,border:`2px solid ${bd}`,fontSize:14,background:bg,margin:"0 4px"}}>
+            <option value="">Select...</option>{b.o.map((o,j)=><option key={j} value={j}>{o}</option>)}
+          </select>
+          {review&&<span style={{fontWeight:600,fontSize:13,color:"#2563eb",marginLeft:4}}>✓ {b.o[b.c]}</span>}
+        </div>;
+      }
+      return <div key={li}>{line}</div>;
+    })}
+  </div>;
+}
+
+function CorrectSt({q,ans,set,review}){
+  return <div>
+    <div style={{background:"#f8fafc",border:"1px solid #e2e8f0",borderRadius:10,padding:16,marginBottom:16,fontSize:15,lineHeight:1.7}}>
+      {q.s.split(`[${q.ul}]`).map((p,i,arr)=><span key={i}>{p}{i<arr.length-1&&<span style={{textDecoration:"underline",fontWeight:700,color:"#2563eb",background:"#dbeafe",padding:"2px 6px",borderRadius:4}}>{q.ul}</span>}</span>)}
+    </div>
+    <div style={{fontSize:13,color:"#6b7280",fontStyle:"italic",marginBottom:12}}>If the underlined term is incorrect, select the correct option:</div>
+    <Opts opts={q.o} ans={ans} set={set} correct={q.c} review={review} name={q._fid+"-cs"}/>
+  </div>;
+}
+
+function RenderQ({q,ans,set,review}){
+  if(q.t==="single")return <Opts opts={q.o} ans={ans} set={set} correct={q.c} review={review} name={q._fid}/>;
+  if(q.t==="multi")return <Opts opts={q.o} ans={ans} set={set} correct={q.c} review={review} multi name={q._fid}/>;
+  if(q.t==="yesno")return <YesNo q={q} ans={ans} set={set} review={review}/>;
+  if(q.t==="scenario")return <Scenario q={q} ans={ans} set={set} review={review}/>;
+  if(q.t==="dd")return <DragDrop q={q} ans={ans} set={set} review={review}/>;
+  if(q.t==="drop")return <Dropdown q={q} ans={ans} set={set} review={review}/>;
+  if(q.t==="correct")return <CorrectSt q={q} ans={ans} set={set} review={review}/>;
+  return null;
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// MAIN APP
+// ══════════════════════════════════════════════════════════════════════════════
+function App(){
+  const[phase,setPhase]=useState("select");
+  const[diff,setDiff]=useState(null);
+  const[qs,setQs]=useState([]);
+  const[ans,setAns]=useState({});
+  const[cur,setCur]=useState(0);
+  const[time,setTime]=useState(0);
+  const[score,setScore]=useState(null);
+  const[wrongOnly,setWrongOnly]=useState(false);
+  const timer=useRef(null);
+
+  const finish=useCallback(()=>{
+    clearInterval(timer.current);
+    setScore(calcScore(qs,ans));
+    setPhase("results");
+  },[qs,ans]);
+
+  useEffect(()=>{
+    if(phase==="exam"&&time>0){
+      timer.current=setInterval(()=>setTime(t=>{if(t<=1){clearInterval(timer.current);return 0;}return t-1;}),1000);
+      return()=>clearInterval(timer.current);
+    }
+    if(phase==="exam"&&time<=0&&qs.length>0)finish();
+  },[phase,time]);
+
+  const start=(d)=>{setDiff(d);const q=buildExam(d);setQs(q);setAns({});setCur(0);setTime(CFG[d].time);setScore(null);setWrongOnly(false);setPhase("exam");};
+  const restart=()=>{setPhase("select");setDiff(null);setQs([]);setAns({});setCur(0);setScore(null);setWrongOnly(false);};
+
+  // ── SELECT ──
+  if(phase==="select")return(
+    <div style={{minHeight:"100vh",background:"linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#1e40af 100%)",display:"flex",justifyContent:"center",alignItems:"center",padding:20}}>
+      <div style={{maxWidth:820,width:"100%",textAlign:"center"}}>
+        <div style={{fontSize:48,marginBottom:8}}>☁️</div>
+        <h1 style={{fontSize:36,fontWeight:800,color:"#fff",margin:"0 0 8px"}}>AZ-900 Exam Simulator</h1>
+        <p style={{color:"#93c5fd",fontSize:16,margin:"0 0 8px"}}>Microsoft Azure Fundamentals Practice Exam</p>
+        <p style={{color:"#64748b",fontSize:13,margin:"0 0 40px"}}>Passing score: 700/1000 · All 7 question types · Source-backed answers</p>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(220px,1fr))",gap:20}}>
+          {Object.entries(CFG).map(([k,v])=>
+            <button key={k} onClick={()=>start(k)} style={{background:"rgba(255,255,255,0.06)",backdropFilter:"blur(10px)",border:`2px solid ${v.clr}40`,borderRadius:16,padding:"28px 20px",cursor:"pointer",textAlign:"center",transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.borderColor=v.clr;e.currentTarget.style.boxShadow=`0 8px 30px ${v.clr}25`;}}
+              onMouseLeave={e=>{e.currentTarget.style.transform="";e.currentTarget.style.borderColor=v.clr+"40";e.currentTarget.style.boxShadow="";}}>
+              <div style={{fontSize:24,fontWeight:800,color:v.clr,marginBottom:8}}>{v.label}</div>
+              <div style={{color:"#94a3b8",fontSize:13,marginBottom:16,lineHeight:1.5}}>{v.desc}</div>
+              <div style={{display:"flex",justifyContent:"center",gap:20,color:"#cbd5e1",fontSize:12}}><span>{v.qs} Qs</span><span>{Math.floor(v.time/60)} min</span></div>
+            </button>
+          )}
+        </div>
+        <div style={{marginTop:36,background:"rgba(255,255,255,0.04)",borderRadius:12,padding:"16px 20px",border:"1px solid rgba(255,255,255,0.08)"}}>
+          <div style={{color:"#94a3b8",fontSize:12,lineHeight:1.7}}><strong style={{color:"#60a5fa"}}>Question types:</strong> Multiple Choice · Yes/No Hotspot · Repeated Scenarios · Drag & Drop · Dropdown Select · Correct the Statement · Multi-Select</div>
+        </div>
+      </div>
+    </div>
+  );
+
+  // ── EXAM ──
+  if(phase==="exam"){
+    const q=qs[cur];const cfg=CFG[diff];const answered=Object.keys(ans).length;
+    return(
+      <div style={{minHeight:"100vh",background:"#f1f5f9"}}>
+        <div style={{background:"#fff",borderBottom:"1px solid #e2e8f0",padding:"12px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12,position:"sticky",top:0,zIndex:100}}>
+          <div style={{display:"flex",alignItems:"center",gap:12}}>
+            <span style={{fontWeight:700,fontSize:15,color:"#1e3a5f"}}>AZ-900</span>
+            <span style={{background:`${cfg.clr}18`,color:cfg.clr,fontWeight:700,fontSize:12,padding:"4px 10px",borderRadius:20}}>{cfg.label}</span>
+          </div>
+          <Timer sec={time}/>
+          <div style={{fontSize:13,color:"#64748b"}}>Q {cur+1}/{qs.length} · Answered: {answered}</div>
+        </div>
+        <div style={{maxWidth:900,margin:"0 auto",padding:"8px 24px 0"}}><div style={{width:"100%",background:"#e2e8f0",borderRadius:8,height:8,overflow:"hidden"}}><div style={{width:`${(cur+1)/qs.length*100}%`,background:"linear-gradient(90deg,#2563eb,#3b82f6)",height:"100%",borderRadius:8,transition:"width .3s"}}/></div></div>
+        <div className="fade-in" style={{maxWidth:900,margin:"16px auto",padding:"0 24px"}}>
+          <div style={{background:"#fff",borderRadius:16,boxShadow:"0 1px 3px rgba(0,0,0,0.06)",border:"1px solid #e2e8f0",padding:"28px 32px"}}>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16,flexWrap:"wrap"}}>
+              <Badge type={q.t}/><span style={{fontSize:11,color:"#94a3b8",fontWeight:600}}>D{q.d}: {DN[q.d]}</span>
+            </div>
+            {q.t!=="scenario"&&<div style={{fontSize:16,fontWeight:600,color:"#1e293b",marginBottom:20,lineHeight:1.6}}>{q.s}</div>}
+            <RenderQ q={q} ans={ans[cur]} set={v=>setAns({...ans,[cur]:v})}/>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"16px 0 32px",gap:12,flexWrap:"wrap"}}>
+            <button onClick={()=>setCur(Math.max(0,cur-1))} disabled={cur===0} style={{padding:"10px 24px",borderRadius:10,border:"1px solid #cbd5e1",background:"#fff",cursor:cur===0?"default":"pointer",fontSize:14,fontWeight:600,color:cur===0?"#cbd5e1":"#475569",opacity:cur===0?.5:1}}>← Previous</button>
+            <div style={{display:"flex",gap:4,flexWrap:"wrap",justifyContent:"center",maxWidth:500}}>
+              {qs.length<=50&&qs.map((_,i)=><button key={i} onClick={()=>setCur(i)} style={{width:28,height:28,borderRadius:6,border:i===cur?"2px solid #2563eb":"1px solid #e2e8f0",background:ans[i]!==undefined?(i===cur?"#2563eb":"#dbeafe"):(i===cur?"#f0f4ff":"#fff"),color:ans[i]!==undefined&&i===cur?"#fff":"#475569",fontSize:11,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>{i+1}</button>)}
+            </div>
+            {cur<qs.length-1?
+              <button onClick={()=>setCur(cur+1)} style={{padding:"10px 24px",borderRadius:10,border:"none",background:"#2563eb",color:"#fff",cursor:"pointer",fontSize:14,fontWeight:600}}>Next →</button>
+              :<button onClick={finish} style={{padding:"10px 24px",borderRadius:10,border:"none",background:"#059669",color:"#fff",cursor:"pointer",fontSize:14,fontWeight:700}}>✓ Submit Exam</button>}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── RESULTS ──
+  if(phase==="results"&&score){
+    const passed=score.scaled>=700;const cfg=CFG[diff];
+    const wrong=score.details.filter(d=>!d.correct);
+    const list=wrongOnly?wrong:score.details;
+    const ds={};
+    [1,2,3].forEach(d=>{const it=score.details.filter(x=>x.q.d===d);const e=it.reduce((s,x)=>s+x.pts,0);const t=it.reduce((s,x)=>s+x.mx,0);ds[d]={e,t,p:t>0?Math.round(e/t*100):0};});
+    return(
+      <div style={{minHeight:"100vh",background:"#f1f5f9"}}>
+        <div style={{background:passed?"linear-gradient(135deg,#059669,#10b981)":"linear-gradient(135deg,#dc2626,#ef4444)",padding:"48px 24px",textAlign:"center",color:"#fff"}}>
+          <div style={{fontSize:72,fontWeight:800}}>{score.scaled}</div>
+          <div style={{fontSize:16,opacity:.9,marginBottom:4}}>out of 1,000</div>
+          <div style={{fontSize:28,fontWeight:700,marginBottom:8}}>{passed?"🎉 PASSED!":"❌ NOT PASSED"}</div>
+          <div style={{fontSize:14,opacity:.85}}>{cfg.label} Level · {score.earned}/{score.total} points · Passing: 700</div>
+        </div>
+        <div style={{maxWidth:900,margin:"0 auto",padding:"24px 24px 64px"}}>
+          <div style={{background:"#fff",borderRadius:16,padding:24,marginBottom:20,border:"1px solid #e2e8f0"}}>
+            <h3 style={{margin:"0 0 16px",color:"#1e293b",fontSize:17}}>Domain Breakdown</h3>
+            {[1,2,3].map(d=><div key={d} style={{marginBottom:12}}>
+              <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:4}}>
+                <span style={{fontWeight:600,color:"#475569"}}>D{d}: {DN[d]}</span>
+                <span style={{fontWeight:700,color:ds[d].p>=70?"#059669":"#dc2626"}}>{ds[d].p}% ({ds[d].e}/{ds[d].t})</span>
+              </div>
+              <div style={{background:"#e2e8f0",borderRadius:8,height:10,overflow:"hidden"}}><div style={{width:`${ds[d].p}%`,background:ds[d].p>=70?"#22c55e":"#ef4444",height:"100%",borderRadius:8,transition:"width .5s"}}/></div>
+            </div>)}
+          </div>
+          <div style={{display:"flex",gap:12,marginBottom:20,flexWrap:"wrap"}}>
+            <button onClick={()=>setWrongOnly(false)} style={{padding:"8px 18px",borderRadius:8,border:!wrongOnly?"2px solid #2563eb":"1px solid #cbd5e1",background:!wrongOnly?"#dbeafe":"#fff",color:!wrongOnly?"#2563eb":"#64748b",fontWeight:600,fontSize:13,cursor:"pointer"}}>All ({score.details.length})</button>
+            <button onClick={()=>setWrongOnly(true)} style={{padding:"8px 18px",borderRadius:8,border:wrongOnly?"2px solid #ef4444":"1px solid #cbd5e1",background:wrongOnly?"#fee2e2":"#fff",color:wrongOnly?"#ef4444":"#64748b",fontWeight:600,fontSize:13,cursor:"pointer"}}>Incorrect ({wrong.length})</button>
+            <div style={{flex:1}}/>
+            <button onClick={restart} style={{padding:"10px 24px",borderRadius:10,border:"none",background:"#2563eb",color:"#fff",cursor:"pointer",fontSize:14,fontWeight:700}}>↻ New Exam</button>
+          </div>
+          {list.map((item,idx)=>{
+            const q=item.q;const gi=score.details.indexOf(item);
+            return <div key={idx} className="fade-in" style={{background:"#fff",borderRadius:16,border:`2px solid ${item.correct?"#bbf7d0":"#fecaca"}`,padding:"24px 28px",marginBottom:16}}>
+              <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12,flexWrap:"wrap"}}>
+                <span style={{fontWeight:700,fontSize:14,color:item.correct?"#059669":"#dc2626",background:item.correct?"#dcfce7":"#fee2e2",padding:"3px 10px",borderRadius:8}}>{item.correct?"✓ Correct":"✗ Incorrect"} ({item.pts}/{item.mx})</span>
+                <Badge type={q.t}/><span style={{fontSize:11,color:"#94a3b8"}}>Q{gi+1} · D{q.d}</span>
+              </div>
+              {q.t!=="scenario"&&<div style={{fontSize:15,fontWeight:600,color:"#1e293b",marginBottom:16,lineHeight:1.5}}>{q.s}</div>}
+              <RenderQ q={q} ans={item.a} review={true} set={()=>{}}/>
+              <div style={{marginTop:16,background:"#f0f9ff",border:"1px solid #bae6fd",borderRadius:10,padding:14}}>
+                <div style={{fontSize:13,fontWeight:700,color:"#0369a1",marginBottom:6}}>Explanation</div>
+                <div style={{fontSize:14,color:"#334155",lineHeight:1.6}}>{q.ex}</div>
+                <a href={q.src} target="_blank" rel="noopener noreferrer" style={{display:"inline-block",marginTop:8,fontSize:12,color:"#2563eb",fontWeight:600,textDecoration:"none"}}>📚 View Source on Microsoft Learn →</a>
+              </div>
+            </div>;
+          })}
+          <div style={{textAlign:"center",paddingTop:24}}>
+            <button onClick={restart} style={{padding:"14px 40px",borderRadius:12,border:"none",background:"linear-gradient(135deg,#2563eb,#1d4ed8)",color:"#fff",cursor:"pointer",fontSize:16,fontWeight:700,boxShadow:"0 4px 15px rgba(37,99,235,0.3)"}}>↻ Take Another Exam</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
