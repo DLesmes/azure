@@ -7,6 +7,10 @@ Notes, conten and code for Azure courses
 * [AZ-900 Course Notes](content/fundamentals_microsoft_azure_az_900.md)
 * [Certifications](https://learn.microsoft.com/en-us/training/courses/az-900t00)
 
+### Test your knowledge 🧠
+
+Highly recommended! Visit this [AZ-900 Exam Simulator](https://dlesmes.github.io/azure/) to test your knowledge for free. It features a 3-level exam simulation to help you get fully prepared for the AZ-900 Certification.
+
 ## Azure tools
 
 * [Azure Pricing Calculator](https://azure.microsoft.com/es-es/pricing/calculator/) - Estimate costs for Azure services
