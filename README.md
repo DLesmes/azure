@@ -5,6 +5,7 @@
 Notes, conten and code for Azure courses
 
 * [AZ-900 Course Notes](content/fundamentals_microsoft_azure_az_900.md)
+* [Active Directory](content/active_directory.md)
 * [Certifications](https://learn.microsoft.com/en-us/training/courses/az-900t00)
 
 ### Test your knowledge 🧠
